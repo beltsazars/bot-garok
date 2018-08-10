@@ -85,8 +85,10 @@ client.on("message", message => {
 
         case ".skip":
         	var server = servers[message.guild.id];
-        	if(server.dispatcher)
+        	if(server.dispatcher){
+                message.channel.send("Skipping "+isPlaying);
         		server.dispatcher.end();
+            }
         	break;
 
         case ".stop":
