@@ -4,6 +4,7 @@ const YTDL = require("ytdl-core");
 const token = "NDc2OTU2NzgwMTA3Mzk5MTY4.Dk2bqQ.4y6mtZwo4hE4NET9TR4UBYehrVk";
 
 var servers = {};
+var isPlaying = false;
 
 function play(connection, message) {
 	var server = servers[message.guild.id];
