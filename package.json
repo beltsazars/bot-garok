@@ -2,7 +2,7 @@
   "name": "garok",
   "version": "1.0.0",
   "description": "test",
-  "main": "bot.js",
+  "main": "index.js",
   "author": "Beltsazar",
   "dependencies": {
     "discord-rpc": "^3.0.0",
