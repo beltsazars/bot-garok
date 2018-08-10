@@ -46,10 +46,7 @@ client.on("message", message => {
             message.channel.send("List of available commands :\n.help\n.play <youtube link>\n.skip\n.stop\n.ping");
             break;
         case ".play":
-            if(isPlaying){
-                message.channel.send("You must wait untill the current music end.");
-                return;
-            }
+            
         	if(!message.member.voiceChannel){
         		message.channel.send("You must be in a voice channel");
         		return;
@@ -62,7 +59,7 @@ client.on("message", message => {
             console.log(args[1]);
 
             if(!servers[message.guild.id]) servers[message.guild.id] = {
-            		queue: []
+            	queue: []
             };
 
             var server = servers[message.guild.id];
