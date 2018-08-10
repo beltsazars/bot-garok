@@ -89,7 +89,7 @@ client.on("message", message => {
         	break;
 
         case ".ping":
-            message.channel.send("Pong sepong: " + client.ping+"ms");
+            message.channel.send("Pong sepong: " + Math.floor(client.ping)+"ms");
             break;
         default:
     }
