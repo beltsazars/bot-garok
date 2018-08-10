@@ -42,12 +42,13 @@ client.on("message", message => {
         case ".help":
             message.channel.send("List of available commands :\n.help\n.play <youtube link>\n.skip\n.stop\n.ping");
             break;
+
         case ".play":
-            
         	if(!message.member.voiceChannel){
         		message.channel.send("You must be in a voice channel");
         		return;
         	}
+
             if(!args[1]){
             	message.channel.send("Please provide a link");
             	return;
@@ -66,14 +67,16 @@ client.on("message", message => {
             	message.member.voiceChannel.join().then(function(connection){
             		play(connection, message);
             	});
+
             if(server.queue.length < 1)
             	YTDL.getInfo(args[1], function(err, info) {
-                    message.channel.send("Playing "+);
+                    message.channel.send("Playing "+ info.title);
                 });
             else
                 YTDL.getInfo(args[1], function(err, info) {
                     message.channel.send("Addded "+info.title+" into queue");
                 });
+
             console.log(server.queue.length);
             console.log(isPlaying);
             break;
