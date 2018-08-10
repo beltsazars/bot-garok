@@ -87,13 +87,14 @@ client.on("message", message => {
 
         case ".skip":
         	var server = servers[message.guild.id];
-
+            isPlaying = false;
         	if(server.dispatcher)
         		server.dispatcher.end();
         	break;
 
         case ".stop":
         	var server = servers[message.guild.id];
+            isPlaying = false;
         	if(message.guild.voiceConnection)
         		message.guild.voiceConnection.disconnect();
         	break;
