@@ -13,10 +13,13 @@ function play(connection, message) {
 	server.queue.shift();
 
 	server.dispatcher.on("end", function() {
-		if(server.queue[0])
+        isPlaying = false;
+		/*
+        if(server.queue[0])
 			play(connection. message)
 		else
 			connection.disconnect();
+        */
 	});
 }
 
@@ -42,8 +45,8 @@ client.on("message", message => {
             message.channel.send("List of available commands :\n.help\n.play <youtube link>\n.skip\n.stop\n.ping");
             break;
         case ".play":
-            if(server.queue[0]){
-                message.channel.send("Sabar ngentot, gabisa queue disini :''v");
+            if(isPlaying){
+                message.channel.send("You must wait untill the current music end.");
                 return;
             }
         	if(!message.member.voiceChannel){
@@ -77,6 +80,8 @@ client.on("message", message => {
             		message.channel.send("Addded "+info.title+" into queue");
   				});
             console.log(server.queue.length);
+            isPlaying = true;
+            console.log(isPlaying);
             break;
 
         case ".skip":
