@@ -4,7 +4,7 @@ const YTDL = require("ytdl-core");
 const token = "NDc2OTU2NzgwMTA3Mzk5MTY4.Dk2bqQ.4y6mtZwo4hE4NET9TR4UBYehrVk";
 
 var servers = {};
-var isPlaying = false;
+var isPlaying = "";
 
 function play(connection, message) {
 	var server = servers[message.guild.id];
@@ -14,13 +14,13 @@ function play(connection, message) {
 	server.queue.shift();
 
 	server.dispatcher.on("end", function() {
-        isPlaying = false;
-		/*
-        if(server.queue[0])
-			play(connection. message)
-		else
+        if(server.queue[0]){
+			play(connection. message);
+            message.channel.send("Playing "+isPlaying);
+        }
+		else{
 			connection.disconnect();
-        */
+        }
 	});
 }
 
@@ -69,35 +69,34 @@ client.on("message", message => {
             	message.member.voiceChannel.join().then(function(connection){
             		play(connection, message);
             	});
+
+            YTDL.getInfo(args[1], function(err, info) {
+                    isPlaying = info.title;
+            });
+
             if(server.queue.length == 1)
-            	YTDL.getInfo(args[1], function(err, info) {
-            		message.channel.send("Playing "+info.title);
-  				});
+            	message.channel.send("Playing "+isPlaying);
             else
-            	YTDL.getInfo(args[1], function(err, info) {
-            		message.channel.send("Addded "+info.title+" into queue");
-  				});
+            	message.channel.send("Addded "+isPlaying+" into queue");
+
             console.log(server.queue.length);
-            isPlaying = true;
             console.log(isPlaying);
             break;
 
         case ".skip":
         	var server = servers[message.guild.id];
-            isPlaying = false;
         	if(server.dispatcher)
         		server.dispatcher.end();
         	break;
 
         case ".stop":
         	var server = servers[message.guild.id];
-            isPlaying = false;
         	if(message.guild.voiceConnection)
         		message.guild.voiceConnection.disconnect();
         	break;
 
         case ".ping":
-            message.channel.send("Pong sepong: " + Math.floor(client.ping)+"ms");
+            message.channel.send("Pong sepong: " + Math.floor(client.ping) +"ms");
             break;
         default:
     }
