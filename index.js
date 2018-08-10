@@ -4,7 +4,6 @@ const YTDL = require("ytdl-core");
 const token = "NDc2OTU2NzgwMTA3Mzk5MTY4.Dk2bqQ.4y6mtZwo4hE4NET9TR4UBYehrVk";
 
 var servers = {};
-var isPlaying = "";
 
 function play(connection, message) {
 	var server = servers[message.guild.id];
@@ -16,7 +15,6 @@ function play(connection, message) {
 	server.dispatcher.on("end", function() {
         if(server.queue[0]){
 			play(connection. message);
-            message.channel.send("Playing "+isPlaying);
         }
 		else{
 			connection.disconnect();
@@ -69,26 +67,22 @@ client.on("message", message => {
             	message.member.voiceChannel.join().then(function(connection){
             		play(connection, message);
             	});
-
-            YTDL.getInfo(args[1], function(err, info) {
-                    isPlaying = info.title;
-            });
-
-            if(server.queue.length == 1)
-            	message.channel.send("Playing "+isPlaying);
+            if(server.queue.length < 1)
+            	YTDL.getInfo(args[1], function(err, info) {
+                    message.channel.send("Playing "+);
+                });
             else
-            	message.channel.send("Addded "+isPlaying+" into queue");
-
+                YTDL.getInfo(args[1], function(err, info) {
+                    message.channel.send("Addded "+info.title+" into queue");
+                });
             console.log(server.queue.length);
             console.log(isPlaying);
             break;
 
         case ".skip":
         	var server = servers[message.guild.id];
-        	if(server.dispatcher){
-                message.channel.send("Skipping "+isPlaying);
+        	if(server.dispatcher)
         		server.dispatcher.end();
-            }
         	break;
 
         case ".stop":
