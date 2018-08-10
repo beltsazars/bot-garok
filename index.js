@@ -42,6 +42,10 @@ client.on("message", message => {
             message.channel.send("List of available commands :\n.help\n.play <youtube link>\n.skip\n.stop\n.ping");
             break;
         case ".play":
+            if(server.queue[0]){
+                message.channel.send("Sabar ngentot, gabisa queue disini :''v");
+                return;
+            }
         	if(!message.member.voiceChannel){
         		message.channel.send("You must be in a voice channel");
         		return;
