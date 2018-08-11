@@ -42,22 +42,15 @@ client.on("message", message => {
         case ".help":
             message.channel.send({embed: {
                 color: 3447003,
-                author: {
-                    name: client.user.username,
-                    icon_url: client.user.avatarURL
-                },
                 fields: [{
                     name: "List of available commands",
                     value: ".help\n.play <youtube link>\n.skip\n.stop\n.ping"
                 }],
                 timestamp: new Date(),
                 footer: {
-                    icon_url: client.user.avatarURL,
                     text: "© garok-bot"
                 }
             }});
-
-            //message.channel.send("List of available commands :\n");
             break;
 
         case ".play":
