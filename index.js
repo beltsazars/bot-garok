@@ -1,6 +1,9 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const YTDL = require("ytdl-core");
+const richPresence = require("easy-rich-presence");
+
+richPresence('261883136420347913',"aib gayss","unnamed_jpg","oofbig","OOF Bot!","oof","OOF#3764");
 
 var servers = {};
 
