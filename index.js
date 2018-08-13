@@ -1,9 +1,6 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const YTDL = require("ytdl-core");
-const richPresence = require("easy-rich-presence");
-
-richPresence('261883136420347913',"aib gayss","unnamed_jpg","oofbig","OOF Bot!","oof","OOF#3764");
 
 var servers = {};
 
@@ -29,17 +26,14 @@ client.on("ready", () => {
     	game: { 
     		name: 'aibs gayss'
     	}, 
-    	status: 'Online' 
+    	status: 'Online',
+        since: Date.time 
     }).then(console.log).catch(console.error);
     console.log("I am ready!");
 });
 
 client.on("message", message => {
 	var args = message.content.split(" ");
-
-    if(message.content.toLowerCase().includes("owo")){
-        message.channel.send("What's this? OwO");
-    }
 
     switch (args[0]) {
         case ".help":
@@ -69,13 +63,13 @@ client.on("message", message => {
 
             console.log(args[1]);
 
-            if(!servers[message.guild.id]) servers[message.guild.id] = {
-            	queue: []
-            };
+            if(!servers[message.guild.id]) 
+                servers[message.guild.id] = { queue: [] };
 
             var server = servers[message.guild.id];
 
             server.queue.push(args[1]);
+
             if(!message.guild.voiceConnection) 
             	message.member.voiceChannel.join().then(function(connection){
             		play(connection, message);
