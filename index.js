@@ -1,14 +1,8 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const YTDL = require("ytdl-core");
-const getter = require('booru-getter')
 
 var servers = {};
-
-getter.getRandomLewd("loli*", (url)=>{
-    const attachment = new Attachment(url);
-    message.channel.send(attachment);
-}
 
 function play(connection, message) {
 	var server = servers[message.guild.id];
@@ -100,7 +94,6 @@ client.on("message", message => {
                 });
 
             console.log(server.queue.length);
-            console.log(isPlaying);
             break;
 
         case ".skip":
@@ -123,4 +116,4 @@ client.on("message", message => {
     }
 });
 
-client.login(process.env.BOT_TOKEN);
+client.login('NDc2OTU2NzgwMTA3Mzk5MTY4.DlAirQ.36Zu9Z3h9k6uNiLwugHy5G79zQ0');
