@@ -75,7 +75,7 @@ client.on("message", message => {
             		play(connection, message);
             	});
 
-            if(server.queue.length < 1)
+            if(!server.queue[0])
             	YTDL.getInfo(args[1], function(err, info) {
                     message.channel.send("Playing "+ info.title);
                 });
