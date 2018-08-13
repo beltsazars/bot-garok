@@ -35,9 +35,11 @@ client.on("ready", () => {
 client.on("message", message => {
 	var args = message.content.split(" ");
     
-    if(!message.author.bot &&message.content.toLowerCase().includes("owo")){
+    if(message.author.bot) 
+        return;
+
+    if(message.content.toLowerCase().includes("owo")){
         message.channel.send("What's this? OwO");
-        break;
     }
 
     switch (args[0]) {
