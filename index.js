@@ -1,8 +1,14 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const YTDL = require("ytdl-core");
+const getter = require('booru-getter')
 
 var servers = {};
+
+getter.getRandomLewd("loli*", (url)=>{
+    const attachment = new Attachment(url);
+    message.channel.send(attachment);
+}
 
 function play(connection, message) {
 	var server = servers[message.guild.id];
@@ -44,27 +50,29 @@ client.on("message", message => {
 
     switch (args[0]) {
         case ".help":
-            message.channel.send({embed: {
-                color: 3447003,
-                fields: [{
-                    name: "List of available commands",
-                    value: ".help\n.play <youtube link>\n.skip\n.stop\n.ping"
-                }],
-                timestamp: new Date(),
-                footer: {
-                    text: "© garok-bot"
+            message.channel.send({
+                embed: {
+                    color: 3447003,
+                    fields: [{
+                        name: "List of available commands",
+                        value: ".help\n.play <youtube link>\n.skip\n.stop\n.ping"
+                    }],
+                    timestamp: new Date(),
+                    footer: {
+                        text: "© garok-bot"
+                    }
                 }
-            }});
+            });
             break;
 
         case ".play":
         	if(!message.member.voiceChannel){
-        		message.channel.send("You must be in a voice channel");
+        		message.channel.send("You must be in a voice channel!");
         		return;
         	}
 
             if(!args[1]){
-            	message.channel.send("Please provide a link");
+            	message.channel.send("Please provide a link!");
             	return;
             }
 
