@@ -45,13 +45,8 @@ client.on("message", message => {
     }
 
     switch (args[0]) {
-        case ".loli":
-            kaori.search('lolibooru', { tags: ['cats'], limit: 1, random: true })
-            .then(images => message.channel.send({file: images[0].common.fileURL}))
-            .catch(err => console.error(err));
-            break;
         case ".booru":
-            kaori.search('danbooru', { tags: ['kancolle'], limit: 1, random: true })
+            kaori.search('danbooru', { tags: [args[1] ? args[1] : 'neko'], limit: 1, random: true })
             .then(images => message.channel.send({file: images[0].common.fileURL}))
             .catch(err => console.error(err));
             break;
