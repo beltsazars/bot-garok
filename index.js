@@ -1,6 +1,8 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const YTDL = require("ytdl-core");
+const Kaori = require('kaori');
+const kaori = new Kaori();
 
 var servers = {};
 
@@ -43,6 +45,12 @@ client.on("message", message => {
     }
 
     switch (args[0]) {
+        case ".booru":
+            kaori.search('danbooru', {tags: ['loli'], limit: 1, random: true}).then(images => {
+                console.log(images[0].common.fileURL)
+                message.channel.send(images[0].common.fileURL)
+            }).catch(err => console.error(err));
+            break;
         case ".help":
             message.channel.send({
                 embed: {

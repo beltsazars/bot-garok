@@ -5,9 +5,9 @@
   "main": "index.js",
   "author": "Beltsazar",
   "dependencies": {
-    "danbooru": "^3.0.7",
     "discord-rpc": "^3.0.0",
     "discord.js": "^11.4.0",
+    "kaori": "^1.1.4",
     "opusscript": "0.0.6",
     "ytdl-core": "^0.24.0"
   }
