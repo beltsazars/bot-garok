@@ -6,6 +6,14 @@ const kaori = new Kaori();
 
 var servers = {};
 
+var download = function(uri, filename, callback){
+        request.head(uri, function(err, res, body){
+            console.log('content-type:', res.headers['content-type']);
+            console.log('content-length:', res.headers['content-length']);
+            request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+    });
+  };    
+
 function play(connection, message) {
 	var server = servers[message.guild.id];
 
@@ -46,8 +54,21 @@ client.on("message", message => {
 
     switch (args[0]) {
         case ".booru":
-            kaori.search('danbooru', {tags: ['loli'], limit: 1, random: true}).then(images =>
-                message.channel.send(images[0].common.fileURL)).catch(err => console.error(err));
+            kaori.search('danbooru', {tags: ['vanilla'], limit: 1, random: true})
+            .then(images => 
+                setTimeout(function () {
+                            download(images[0].common.fileURL,'last.png',function(){
+                                client.uploadFile({
+                                    to: channelID,
+                                    file: "last.png",
+                                    filename: "last.png"
+                                }, (error, resp) => {
+                                    console.log(error);
+                                    console.log(resp);
+                                })
+                            })
+                }, 100)
+            ).catch(err => console.error(err));
             break;
         case ".help":
             message.channel.send({
