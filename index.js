@@ -2,9 +2,8 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const YTDL = require("ytdl-core");
 const Kaori = require('kaori');
-const moreSites = require('./moreSites');
- 
-const kaori = new Kaori(moreSites);
+const kaori = new Kaori();
+
 var servers = {};
 
 function play(connection, message) {
