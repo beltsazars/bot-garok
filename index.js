@@ -2,8 +2,9 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const YTDL = require("ytdl-core");
 const Kaori = require('kaori');
-const kaori = new Kaori();
-
+const moreSites = require('./moreSites');
+ 
+const kaori = new Kaori(moreSites);
 var servers = {};
 
 function play(connection, message) {
@@ -45,8 +46,8 @@ client.on("message", message => {
     }
 
     switch (args[0]) {
-        case ".r34":
-            kaori.search('r34', { tags: ['kancolle'], limit: 1, random: true })
+        case ".loli":
+            kaori.search('lolibooru', { tags: ['cats'], limit: 1, random: true })
             .then(images => message.channel.send({file: images[0].common.fileURL}))
             .catch(err => console.error(err));
             break;
