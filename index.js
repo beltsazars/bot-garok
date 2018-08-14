@@ -56,7 +56,7 @@ client.on("message", message => {
                     color: 3447003,
                     fields: [{
                         name: "List of available commands",
-                        value: ".help\n.play <youtube link>\n.skip\n.stop\n.ping"
+                        value: ".help\n.play <youtube link>\n.skip\n.stop\n.ping\n.booru"
                     }],
                     timestamp: new Date(),
                     footer: {
