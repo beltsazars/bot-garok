@@ -47,7 +47,7 @@ client.on("message", message => {
     switch (args[0]) {
         case ".booru":
             kaori.search('danbooru', { tags: ['cat'], limit: 1, random: true })
-            .then(images => console.log(images[0].common.fileURL))
+            .then(images => message.channel.send(new Attachment(images[0].common.fileURL)))
             .catch(err => console.error(err));
             break;
         case ".help":
