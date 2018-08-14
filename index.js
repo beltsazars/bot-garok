@@ -1,4 +1,4 @@
-const { Discord, Attachment } = require("discord.js");
+const Discord = require("discord.js");
 const client = new Discord.Client();
 const YTDL = require("ytdl-core");
 const Kaori = require('kaori');
@@ -47,7 +47,7 @@ client.on("message", message => {
     switch (args[0]) {
         case ".booru":
             kaori.search('danbooru', { tags: ['cat'], limit: 1, random: true })
-            .then(images => message.channel.send(new Attachment(images[0].common.fileURL)))
+            .then(images => message.channel.send(images[0].common.fileURL))
             .catch(err => console.error(err));
             break;
         case ".help":
