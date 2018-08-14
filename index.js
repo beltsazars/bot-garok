@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+const { Discord, Attachment } = require("discord.js");
 const client = new Discord.Client();
 const YTDL = require("ytdl-core");
 const Kaori = require('kaori');
