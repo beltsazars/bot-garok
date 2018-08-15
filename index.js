@@ -89,7 +89,7 @@ client.on("message", message => {
                 console.log(server.queue);
             }
 
-            else if(args[1] == 's' || 'skip'){
+            else if(args[1] == 's' || args[1] == 'skip'){
                 if (server.dispatcher)
                     server.dispatcher.end();
             }
