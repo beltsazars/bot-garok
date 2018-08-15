@@ -6,8 +6,10 @@ const kaori = new Kaori();
 
 var servers = {};
 
+var msgs;
+
 function play(connection, message) {
-    var server = servers[message.guild.id];
+    var server = servers[msgs.guild.id];
 
     server.dispatcher = connection.playStream(YTDL(server.queue[0], {
         filter: "audioonly"
@@ -16,7 +18,7 @@ function play(connection, message) {
     server.dispatcher.on("end", function () {
         server.queue.shift();
         if (server.queue[0]) {
-            play(connection.message);
+            play(connection, message);
         } else {
             connection.disconnect();
         }
@@ -26,7 +28,7 @@ function play(connection, message) {
 client.on("ready", () => {
     client.user.setPresence({
         game: {
-            name: 'aibs gayss'
+            name: 'aib gayss'
         },
         status: 'Online',
         since: Date.time
@@ -41,6 +43,8 @@ client.on("message", message => {
         servers[message.guild.id] = { queue: [] };
     }
     
+    msgs = message;
+
     var server = servers[message.guild.id];
             
     if (message.author.bot || !message.content.startsWith('.'))
