@@ -49,7 +49,7 @@ client.on("message", message => {
         case ".m":
             if (!servers[message.guild.id]){
                     servers[message.guild.id] = {
-                        queue: [null]
+                        queue: null
                     };
             }
             var server = servers[message.guild.id];
@@ -94,7 +94,7 @@ client.on("message", message => {
                 if (message.guild.voiceConnection)
                     message.guild.voiceConnection.disconnect();
             
-            else if(args[1] == 'q' || args[1] == 'queue')
+            else if (args[1] == 'q' || args[1] == 'queue')
                 for (var i = 0; i < server.queue.length; i++)
                     message.channel.send(server.queue[i]);
                 
