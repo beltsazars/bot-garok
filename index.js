@@ -49,7 +49,7 @@ client.on("message", message => {
         case ".m":
             if (!servers[message.guild.id]){
                     servers[message.guild.id] = {
-                        queue: []
+                        queue: [null]
                     };
             }
             var server = servers[message.guild.id];
@@ -66,8 +66,6 @@ client.on("message", message => {
                 }
 
                 console.log(args[2]);
-
-                
 
                 server.queue.push(args[2]);
 
