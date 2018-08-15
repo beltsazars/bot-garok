@@ -39,7 +39,7 @@ client.on("message", message => {
     var args = message.content.split(" ");
     
     if (!servers[message.guild.id]) {
-            servers[message.guild.id] = { queue: [] };
+        servers[message.guild.id] = { queue: [] };
     }
     
     var server = servers[message.guild.id];
@@ -66,7 +66,7 @@ client.on("message", message => {
 
                 console.log(args[2]);
 
-                server.queue.push(args[2]);
+                
 
                 if (!message.guild.voiceConnection)
                     message.member.voiceChannel.join().then(function (connection) {
@@ -81,25 +81,31 @@ client.on("message", message => {
                     YTDL.getInfo(args[2], function (err, info) {
                         message.channel.send("Addded " + info.title + " into queue");
                     });
+                
+                server.queue.push(args[2]);
 
                 console.log(server.queue.length);
             }
 
-            else if(args[1] == 's' || 'skip')
+            else if(args[1] == 's' || 'skip'){
                 if (server.dispatcher)
                     server.dispatcher.end();
+            }
             
-            else if(args[1] == 'stop')
-                if (message.guild.voiceConnection)
-                    message.guild.voiceConnection.disconnect();
-            
-            else if (args[1] == 'q' || args[1] == 'queue')
-                for (var i = 0; i < server.queue.length; i++)
+            else if(args[1] == 'stop'){
+                 if (message.guild.voiceConnection) { 
+                    for (var i = server.queue.length - 1; i >= 0; i--) { 
+                        server.queue.splice(i, 1); 
+                    } 
+                    server.dispatcher.end(); 
+                    console.log("[" + new Date().toLocaleString() + "] Stopped the queue."); 
+                }﻿
+            }
+            else if (args[1] == 'q' || args[1] == 'queue'){                
+                for (var i = 0; i < server.queue.length; i++){
                     message.channel.send(server.queue[i]);
-                
-            else if (!args[1])
-                message.channel.send("Usage:\n.m <play/queue/skip/stop>");
-
+                }
+            }
             break;
 
         case ".booru":
