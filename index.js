@@ -65,15 +65,14 @@ client.on("message", message => {
                 }
 
                 console.log(args[2]);
-
+                console.log(server.queue.length);
                 
-
                 if (!message.guild.voiceConnection)
                     message.member.voiceChannel.join().then(function (connection) {
                         play(connection, message);
                     });
 
-                if (!server.queue[0])
+                if (!server.queue.length)
                     YTDL.getInfo(args[2], function (err, info) {
                         message.channel.send("Playing " + info.title);
                     });
@@ -84,7 +83,7 @@ client.on("message", message => {
                 
                 server.queue.push(args[2]);
 
-                console.log(server.queue.length);
+                console.log(server.queue);
             }
 
             else if(args[1] == 's' || 'skip'){
