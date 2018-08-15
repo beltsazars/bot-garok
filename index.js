@@ -13,9 +13,8 @@ function play(connection, message) {
         filter: "audioonly"
     }));
 
-    server.queue.shift();
-
     server.dispatcher.on("end", function () {
+        server.queue.shift();
         if (server.queue[0]) {
             play(connection.message);
         } else {
@@ -66,7 +65,7 @@ client.on("message", message => {
 
                 console.log(args[2]);
                 console.log(server.queue.length);
-                
+
                 if (!message.guild.voiceConnection)
                     message.member.voiceChannel.join().then(function (connection) {
                         play(connection, message);
@@ -78,7 +77,7 @@ client.on("message", message => {
                     });
                 else
                     YTDL.getInfo(args[2], function (err, info) {
-                        message.channel.send("Addded " + info.title + " into queue");
+                        message.channel.send("Added " + info.title + " into queue");
                     });
                 
                 server.queue.push(args[2]);
@@ -102,7 +101,9 @@ client.on("message", message => {
             }
             else if (args[1] == 'q' || args[1] == 'queue'){                
                 for (var i = 0; i < server.queue.length; i++){
-                    message.channel.send(server.queue[i]);
+                    YTDL.getInfo(args[2], function (err, info) {
+                        message.channel.send((i+1)+". " + info.title);
+                    });
                 }
             }
             break;
