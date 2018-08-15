@@ -47,7 +47,13 @@ client.on("message", message => {
 
     switch (args[0]) {
         case ".m":
+            if (!servers[message.guild.id]){
+                    servers[message.guild.id] = {
+                        queue: []
+                    };
+            }
             var server = servers[message.guild.id];
+            
             if (args[1] == 'play' || args[1] == 'p') {
                 if (!message.member.voiceChannel) {
                     message.channel.send("You must be in a voice channel!");
@@ -61,11 +67,7 @@ client.on("message", message => {
 
                 console.log(args[2]);
 
-                if (!servers[message.guild.id]){
-                    servers[message.guild.id] = {
-                        queue: [null]
-                    };
-                }
+                
 
                 server.queue.push(args[2]);
 
