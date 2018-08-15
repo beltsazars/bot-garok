@@ -105,8 +105,8 @@ client.on("message", message => {
             }
             else if (args[1] == 'q' || args[1] == 'queue'){                
                 for (var i = 0; i < server.queue.length; i++){
-                    YTDL.getInfo(args[2], function (err, info) {
-                        message.channel.send((i+1)+". " + info.title);
+                    YTDL.getInfo(server.queue[i], function (err, info) {
+                        message.channel.send((i+1) + ". " + info.title);
                     });
                 }
             }
