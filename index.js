@@ -37,7 +37,13 @@ client.on("ready", () => {
 
 client.on("message", message => {
     var args = message.content.split(" ");
-
+    
+    if (!servers[message.guild.id]) {
+            servers[message.guild.id] = { queue: [] };
+    }
+    
+    var server = servers[message.guild.id];
+            
     if (message.author.bot || !message.content.startsWith('.'))
         return;
 
@@ -47,13 +53,6 @@ client.on("message", message => {
 
     switch (args[0]) {
         case ".m":
-            if (!servers[message.guild.id]){
-                    servers[message.guild.id] = {
-                        queue: null
-                    };
-            }
-            var server = servers[message.guild.id];
-            
             if (args[1] == 'play' || args[1] == 'p') {
                 if (!message.member.voiceChannel) {
                     message.channel.send("You must be in a voice channel!");
@@ -98,7 +97,7 @@ client.on("message", message => {
                 for (var i = 0; i < server.queue.length; i++)
                     message.channel.send(server.queue[i]);
                 
-            else
+            else if (!args[1])
                 message.channel.send("Usage:\n.m <play/queue/skip/stop>");
 
             break;
