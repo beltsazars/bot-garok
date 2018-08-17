@@ -78,22 +78,20 @@ client.on("message", message => {
                 if (!server.queue.length)
                     YTDL.getInfo(args[2], function (err, info) {
                         message.channel.send("Playing " + info.title);
-                    });
+                    }).catch(err => console.error(err));
                 else
                     YTDL.getInfo(args[2], function (err, info) {
                         message.channel.send("Added " + info.title + " into queue");
-                    });
+                    }).catch(err => console.error(err));
                 
                 server.queue.push(args[2]);
 
                 console.log(server.queue);
             }
-
             else if(args[1] == 's' || args[1] == 'skip'){
                 if (server.dispatcher)
                     server.dispatcher.end();
             }
-            
             else if(args[1] == 'stop'){
                  if (message.guild.voiceConnection) { 
                     for (var i = server.queue.length - 1; i >= 0; i--) { 
@@ -106,8 +104,8 @@ client.on("message", message => {
             else if (args[1] == 'q' || args[1] == 'queue'){                
                 for (var i = 0; i < server.queue.length; i++){
                     YTDL.getInfo(server.queue[i], function (err, info) {
-                        message.channel.send(i + ". " + info.title);
-                    });
+                        message.channel.send("- " + info.title);
+                    }).catch(err => console.error(err));
                 }
             }
             break;
@@ -141,6 +139,7 @@ client.on("message", message => {
             break;
 
         case ".ping":
+            //© Tomflynn Beltsazar 2018
             message.channel.send("Pong sepong: " + Math.floor(client.ping) + "ms");
             break;
         default:
