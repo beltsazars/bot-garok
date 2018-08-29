@@ -12,7 +12,7 @@ function play(connection, message) {
     var server = servers[msgs.guild.id];
 
     YTDL.getInfo(args[2], function (err, info) {
-        message.channel.send("Playing " + info.title);
+        msgs.channel.send("Playing " + info.title);
     }).catch(err => console.error(err));
 
     server.dispatcher = connection.playStream(YTDL(server.queue[0], {
