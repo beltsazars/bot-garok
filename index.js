@@ -11,6 +11,10 @@ var msgs;
 function play(connection, message) {
     var server = servers[msgs.guild.id];
 
+    YTDL.getInfo(args[2], function (err, info) {
+        message.channel.send("Playing " + info.title);
+    }).catch(err => console.error(err));
+
     server.dispatcher = connection.playStream(YTDL(server.queue[0], {
         filter: "audioonly"
     }));
@@ -75,11 +79,7 @@ client.on("message", message => {
                         play(connection, message);
                     });
 
-                if (!server.queue.length)
-                    YTDL.getInfo(args[2], function (err, info) {
-                        message.channel.send("Playing " + info.title);
-                    }).catch(err => console.error(err));
-                else
+                if (server.queue.length)
                     YTDL.getInfo(args[2], function (err, info) {
                         message.channel.send("Added " + info.title + " into queue");
                     }).catch(err => console.error(err));
@@ -98,7 +98,7 @@ client.on("message", message => {
                         server.queue.splice(i, 1); 
                     } 
                     server.dispatcher.end(); 
-                    console.log("[" + new Date().toLocaleString() + "] Stopped the queue."); 
+                    console.log("Stopped the queue."); 
                 }﻿
             }
             else if (args[1] == 'q' || args[1] == 'queue'){                
@@ -111,7 +111,7 @@ client.on("message", message => {
             break;
 
         case ".booru":
-            kaori.search('danbooru', {
+                kaori.search('danbooru', {
                     tags: [args[1] ? args[1] : 'neko'],
                     limit: 1,
                     random: true
