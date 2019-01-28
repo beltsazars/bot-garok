@@ -37,25 +37,6 @@ client.on("ready", () => {
 });
 
 client.on("message", message => {
-	async function sendFile(fileToSend, caption) {
-    	message.channel.send(caption, {
-	        file: fileToSend // Or replace with FileOptions object
-    	});
-	}
-
-	async function doRequest(url) {
-    	return request({
-	        url: url,
-    	}, (error, resp, body) => {
-	        if (!error && resp.statusCode == 200) {
-            	return body;
-        	} else {
-            	//Throw error, this will be caught in the .catch() 
-            	return error;
-        	}
-    	});
-	}
-
     var args = message.content.split(" ");
     
     if (!servers[message.guild.id]) {
@@ -74,6 +55,7 @@ client.on("message", message => {
     	return;
 
     switch (args[0]) {
+      	/*
       	case ".pixiv":
         	if (args[1] == null || args[1] == "" || args[1] == undefined) {
             //will random here.
@@ -118,7 +100,7 @@ client.on("message", message => {
             	sendFile("https://liminalia.000webhostapp.com/pixiv.php?url=" + imgPixivRealUrl, caption);
         	}
     		break;
-
+    	*/
         case ".m":
             if (args[1] == 'play' || args[1] == 'p') {
                 if (!message.member.voiceChannel) {
@@ -209,5 +191,24 @@ client.on("message", message => {
         default:
     }
 });
+/*
+async function sendFile(fileToSend, caption) {
+    message.channel.send(caption, {
+        file: fileToSend // Or replace with FileOptions object
+    });
+}
 
+async function doRequest(url) {
+    return request({
+        url: url,
+    }, (error, resp, body) => {
+        if (!error && resp.statusCode == 200) {
+            return body;
+        } else {
+            //Throw error, this will be caught in the .catch() 
+            return error;
+        }
+    });
+}
+*/
 client.login(process.env.BOT_TOKEN);
