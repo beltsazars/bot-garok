@@ -86,6 +86,7 @@ client.on("message", async message => {
             	if (args[1] == "monthly") {
                 	var tempPixivSrc = await doRequest("https://www.pixiv.net/ranking.php?mode=monthly");
             	}
+            	tempPixivSrc = tempPixivSrc.toString();
             	console.log(pixivRank);
             	var imgPixivId = (((tempPixivSrc.split('/member_illust.php?mode=medium&amp;illust_id=')[pixivRank]).toString()).split('"')[0]).toString();
             	var imgPixiv = "https://embed.pixiv.net/decorate.php?illust_id=" + imgPixivId;
