@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
+const request = require("request");
 const YTDL = require("ytdl-core");
 const Kaori = require('kaori');
 const kaori = new Kaori();
