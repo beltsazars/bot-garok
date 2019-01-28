@@ -47,12 +47,12 @@ client.on("message", message => {
 
     var server = servers[message.guild.id];
             
-    if (message.author.bot || !message.content.startsWith('.'))
+    if (message.author.bot)
         return;
-
-    if (message.content.toLowerCase().includes("owo")) {
+    else if (message.content.toLowerCase().includes("owo"))
         message.channel.send("What's this? OwO");
-    }
+    else if(!message.content.startsWith('.'))
+    	return;
 
     switch (args[0]) {
         case ".m":
