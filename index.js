@@ -73,6 +73,7 @@ client.on("message", async message => {
             	}
                 if (args[1] == "daily" || args[1] == "weekly" || args[1] == "monthly") {
                   var url = "https://www.pixiv.net/ranking.php?mode=" + args[1];
+			console.log(url);
                   doRequest(url, function(src){
                     var tempPixivSrc = src;
                     var imgPixivId = (((tempPixivSrc.split('/member_illust.php?mode=medium&amp;illust_id=')[pixivRank]).toString()).split('"')[0]).toString();
