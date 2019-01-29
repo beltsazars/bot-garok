@@ -16,7 +16,7 @@ function play(connection, message) {
         filter: "audioonly"
     }));
 
-    server.dispatcher.on("end", function () {
+    server.dispatcher.on("end", function() {
         server.queue.shift();
         if (server.queue[0]) {
             play(connection, message);
@@ -39,64 +39,81 @@ client.on("ready", () => {
 
 client.on("message", async message => {
     var args = message.content.split(" ");
-    
+
     if (!servers[message.guild.id]) {
-        servers[message.guild.id] = { queue: [] };
+        servers[message.guild.id] = {
+            queue: []
+        };
     }
-    
+
     msgs = message;
 
     var server = servers[message.guild.id];
-         
+
     if (message.author.bot)
-    	return;
+        return;
     else if (message.content.toLowerCase().includes("owo"))
-		message.channel.send("What's this? OwO");
-	else if(!message.content.startsWith('.'))
-    	return;
+        message.channel.send("What's this? OwO");
+    else if (!message.content.startsWith('.'))
+        return;
 
     switch (args[0]) {
-      	case ".pixiv":
-        	if (args[1] == null || args[1] == "" || args[1] == undefined) {
-            //will random here.
-            //test 2 mode
+        case ".pixiv":
+            if (args[1] == null || args[1] == "" || args[1] == undefined) {
+                //will random here.
+                //test 2 mode
 
-        	} else {
-            	//get rank
-            	var pixivRank = 1;
-            	//if arg2 is number, then get it
-            	if (!isNaN(args[2])) {
-                	//!pixiv today 2
-                	if (args[2] > 50)
-                    	pixivRank = 50;
-                	pixivRank = args[2];
-            	}
-                if (args[1] == "daily" || args[1] == "weekly" || args[1] == "monthly") {
-                  var url = "https://www.pixiv.net/ranking.php?mode=" + args[1];
-			console.log(url);
-                  doRequest(url, function(src){
-                    var tempPixivSrc = src;
-                    var imgPixivId = (((tempPixivSrc.split('/member_illust.php?mode=medium&amp;illust_id=')[pixivRank]).toString()).split('"')[0]).toString();
-            		var imgPixiv = "https://embed.pixiv.net/decorate.php?illust_id=" + imgPixivId;
-            		var imgPixivTitle = (((tempPixivSrc.split('data-title="')[pixivRank]).toString()).split('"')[0]).toString();
-            		var imgPixivIllustrator = (((tempPixivSrc.split('data-user-name="')[pixivRank]).toString()).split('"')[0]).toString();
-
-            		//method 2 test
-            		var imgPixivRealUrl = (((tempPixivSrc.split('thumbnail-filter lazy-image"data-src="')[pixivRank]).toString()).split('"')[0]);
-            		imgPixivRealUrl = imgPixivRealUrl.replace(imgPixivRealUrl.split("pximg.net")[1].split("/img-master")[0], "");
-			imgPixivRealUrl = imgPixivRealUrl.replace("square", "master");
-			console.log(imgPixivRealUrl);
-
-            		var caption = "#" + pixivRank + " " + imgPixivTitle + "\nby " + imgPixivIllustrator;
-            		sendFile("https://liminalia.000webhostapp.com/pixiv.php?url=" + imgPixivRealUrl, caption);
-                  });
+            } else {
+                //get rank
+                var pixivRank = 1;
+                //if arg2 is number, then get it
+                if (!isNaN(args[2])) {
+                    //!pixiv today 2
+                    if (args[2] > 50)
+                        pixivRank = 50;
+                    pixivRank = args[2];
                 }
-	            //prevent err, example !pixiv asjdiajdis
-    	        
-            	
-        	}
-    		break;
-    	
+                if (args[1] == "daily" || args[1] == "weekly" || args[1] == "monthly") {
+                    var url = "https://www.pixiv.net/ranking.php?mode=" + args[1];
+                    console.log(url);
+                    doRequest(url, function(src) {
+                        var tempPixivSrc = src;
+                        var imgPixivId = (((tempPixivSrc.split('/member_illust.php?mode=medium&amp;illust_id=')[pixivRank]).toString()).split('"')[0]).toString();
+                        var imgPixiv = "https://embed.pixiv.net/decorate.php?illust_id=" + imgPixivId;
+                        var imgPixivTitle = (((tempPixivSrc.split('data-title="')[pixivRank]).toString()).split('"')[0]).toString();
+                        var imgPixivIllustrator = (((tempPixivSrc.split('data-user-name="')[pixivRank]).toString()).split('"')[0]).toString();
+
+                        //method 2 test
+                        var imgPixivRealUrl = (((tempPixivSrc.split('thumbnail-filter lazy-image"data-src="')[pixivRank]).toString()).split('"')[0]);
+                        imgPixivRealUrl = imgPixivRealUrl.replace(imgPixivRealUrl.split("pximg.net")[1].split("/img-master")[0], "");
+                        imgPixivRealUrl = imgPixivRealUrl.replace("square", "master");
+                        console.log(imgPixivRealUrl);
+
+                        var caption = "#" + pixivRank + " " + imgPixivTitle + "\nby " + imgPixivIllustrator;
+                        sendFile("https://liminalia.000webhostapp.com/pixiv.php?url=" + imgPixivRealUrl, caption);
+                    });
+                } else {
+                    //console.log("https://api.pixiv.moe/v1/search?word=" + message.content.split(".pixiv ")[1] + "&page=1");
+                    doRequest("https://api.pixiv.moe/v1/search?word=" + message.content.split(".pixiv ")[1] + "&page=1", function(src) {
+                        var data = JSON.parse(src);
+                        var length = data.response.length;
+                        var rng = Math.floor(Math.random() * ((data.response.length - 1) - 0 + 1) + 0);
+			    console.log(rng);
+                        console.log(data.response[rng].image_urls.large)
+                        message.channel.send("", {
+                            file: data.response[rng].image_urls.large // Or replace with FileOptions object
+                        });
+                    });
+
+
+
+                }
+                //prevent err, example !pixiv asjdiajdis
+
+
+            }
+            break;
+
         case ".m":
             if (args[1] == 'play' || args[1] == 'p') {
                 if (!message.member.voiceChannel) {
@@ -113,39 +130,36 @@ client.on("message", async message => {
                 console.log(server.queue.length);
 
                 if (!message.guild.voiceConnection)
-                    message.member.voiceChannel.join().then(function (connection) {
+                    message.member.voiceChannel.join().then(function(connection) {
                         play(connection, message);
                     });
 
                 if (!server.queue.length)
-                    YTDL.getInfo(args[2], function (err, info) {
+                    YTDL.getInfo(args[2], function(err, info) {
                         message.channel.send("Playing " + info.title);
                     }).catch(err => console.error(err));
                 else
-                    YTDL.getInfo(args[2], function (err, info) {
+                    YTDL.getInfo(args[2], function(err, info) {
                         message.channel.send("Added " + info.title + " into queue");
                     }).catch(err => console.error(err));
-                
+
                 server.queue.push(args[2]);
 
                 console.log(server.queue);
-            }
-            else if(args[1] == 's' || args[1] == 'skip'){
+            } else if (args[1] == 's' || args[1] == 'skip') {
                 if (server.dispatcher)
                     server.dispatcher.end();
-            }
-            else if(args[1] == 'stop'){
-                 if (message.guild.voiceConnection) { 
-                    for (var i = server.queue.length - 1; i >= 0; i--) { 
-                        server.queue.splice(i, 1); 
-                    } 
-                    server.dispatcher.end(); 
-                    console.log("[" + new Date().toLocaleString() + "] Stopped the queue."); 
-                }﻿
-            }
-            else if (args[1] == 'q' || args[1] == 'queue'){                
-                for (var i = 0; i < server.queue.length; i++){
-                    YTDL.getInfo(server.queue[i], function (err, info) {
+            } else if (args[1] == 'stop') {
+                if (message.guild.voiceConnection) {
+                    for (var i = server.queue.length - 1; i >= 0; i--) {
+                        server.queue.splice(i, 1);
+                    }
+                    server.dispatcher.end();
+                    console.log("[" + new Date().toLocaleString() + "] Stopped the queue.");
+                }
+            } else if (args[1] == 'q' || args[1] == 'queue') {
+                for (var i = 0; i < server.queue.length; i++) {
+                    YTDL.getInfo(server.queue[i], function(err, info) {
                         message.channel.send("- " + info.title);
                     }).catch(err => console.error(err));
                 }
