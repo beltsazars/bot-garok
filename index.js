@@ -95,11 +95,11 @@ client.on("message", async message => {
                 } else {
                     //console.log("https://api.pixiv.moe/v1/search?word=" + message.content.split(".pixiv ")[1] + "&page=1");
                     doRequest("https://api.pixiv.moe/v1/search?word=" + message.content.split(".pixiv ")[1] + "&page=1", function(src) {
-			    if(src == null || src == undefined || src == "") {
-				    message.chanel.send("ora ketemu gambare");
+                        var data = JSON.parse(src);
+			    if(data.count == 0) {
+				    message.channel.send("Ora ketemu gambar e");
 				    return;
 			    }
-                        var data = JSON.parse(src);
                         var length = data.response.length;
                         var rng = Math.floor(Math.random() * ((data.response.length - 1) - 0 + 1) + 0);
 			    console.log(rng);
