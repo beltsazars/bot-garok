@@ -82,7 +82,9 @@ client.on("message", async message => {
 
             		//method 2 test
             		var imgPixivRealUrl = (((tempPixivSrc.split('thumbnail-filter lazy-image"data-src="')[pixivRank]).toString()).split('"')[0]);
-            		imgPixivRealUrl = imgPixivRealUrl.replace((((imgPixivRealUrl.split("/c/")[1]).toString()).split("/")[0]).toString(), "600x600");
+            		imgPixivRealUrl = imgPixivRealUrl.replace(imgPixivRealUrl.split("pximg.net")[1].split("/img-master")[0], "");
+			imgPixivRealUrl = imgPixivRealUrl.replace("square", "master");
+			console.log(imgPixivRealUrl);
 
             		var caption = "#" + pixivRank + " " + imgPixivTitle + "\nby " + imgPixivIllustrator;
             		sendFile("https://liminalia.000webhostapp.com/pixiv.php?url=" + imgPixivRealUrl, caption);
