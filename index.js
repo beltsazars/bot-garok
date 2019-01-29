@@ -47,12 +47,12 @@ client.on("message", async message => {
     msgs = message;
 
     var server = servers[message.guild.id];
-            
+         
     if (message.author.bot)
-        return;
+    	return;
     else if (message.content.toLowerCase().includes("owo"))
-        message.channel.send("What's this? OwO");
-    else if(!message.content.startsWith('.'))
+		message.channel.send("What's this? OwO");
+	else if(!message.content.startsWith('.'))
     	return;
 
     switch (args[0]) {
@@ -71,35 +71,26 @@ client.on("message", async message => {
                     	pixivRank = 50;
                 	pixivRank = args[2];
             	}
+                if (args[1] == "daily" || args[1] == "weekly" || args[1] == "monthly") {
+                  var url = "https://www.pixiv.net/ranking.php?mode=" + args[1];
+                  doRequest(url, function(src){
+                    var tempPixivSrc = src;
+                    var imgPixivId = (((tempPixivSrc.split('/member_illust.php?mode=medium&amp;illust_id=')[pixivRank]).toString()).split('"')[0]).toString();
+            		var imgPixiv = "https://embed.pixiv.net/decorate.php?illust_id=" + imgPixivId;
+            		var imgPixivTitle = (((tempPixivSrc.split('data-title="')[pixivRank]).toString()).split('"')[0]).toString();
+            		var imgPixivIllustrator = (((tempPixivSrc.split('data-user-name="')[pixivRank]).toString()).split('"')[0]).toString();
+
+            		//method 2 test
+            		var imgPixivRealUrl = (((tempPixivSrc.split('thumbnail-filter lazy-image"data-src="')[pixivRank]).toString()).split('"')[0]);
+            		imgPixivRealUrl = imgPixivRealUrl.replace((((imgPixivRealUrl.split("/c/")[1]).toString()).split("/")[0]).toString(), "600x600");
+
+            		var caption = "#" + pixivRank + " " + imgPixivTitle + "\nby " + imgPixivIllustrator;
+            		sendFile("https://liminalia.000webhostapp.com/pixiv.php?url=" + imgPixivRealUrl, caption);
+                  });
+                }
 	            //prevent err, example !pixiv asjdiajdis
-    	        var tempPixivSrc = await doRequest("https://www.pixiv.net/ranking.php?mode=daily");
-        	    if (args[1] == "today") {
-            	    //!pixiv today 
-                	//set url to daily
-                	var tempPixivSrc = await doRequest("https://www.pixiv.net/ranking.php?mode=daily");
-            	}
-            	if (args[1] == "weekly") {
-                	//!pixiv weekly
-                	//set url toweekly
-                	var tempPixivSrc = await doRequest("https://www.pixiv.net/ranking.php?mode=weekly");
-            	}
-            	if (args[1] == "monthly") {
-                	var tempPixivSrc = await doRequest("https://www.pixiv.net/ranking.php?mode=monthly");
-            	}
-            	console.log(tempPixivSrc);
-            	tempPixivSrc = tempPixivSrc.toString();
-            	console.log(pixivRank);
-            	var imgPixivId = (((tempPixivSrc.split('/member_illust.php?mode=medium&amp;illust_id=')[pixivRank]).toString()).split('"')[0]).toString();
-            	var imgPixiv = "https://embed.pixiv.net/decorate.php?illust_id=" + imgPixivId;
-            	var imgPixivTitle = (((tempPixivSrc.split('data-title="')[pixivRank]).toString()).split('"')[0]).toString();
-            	var imgPixivIllustrator = (((tempPixivSrc.split('data-user-name="')[pixivRank]).toString()).split('"')[0]).toString();
-
-            	//method 2 test
-            	var imgPixivRealUrl = (((tempPixivSrc.split('thumbnail-filter lazy-image"data-src="')[pixivRank]).toString()).split('"')[0]);
-            	imgPixivRealUrl = imgPixivRealUrl.replace((((imgPixivRealUrl.split("/c/")[1]).toString()).split("/")[0]).toString(), "600x600");
-
-            	var caption = "#" + pixivRank + " " + imgPixivTitle + "\nby " + imgPixivIllustrator;
-            	sendFile("https://liminalia.000webhostapp.com/pixiv.php?url=" + imgPixivRealUrl, caption);
+    	        
+            	
         	}
     		break;
     	
@@ -195,17 +186,17 @@ client.on("message", async message => {
 });
 
 async function sendFile(fileToSend, caption) {
-    message.channel.send(caption, {
+    msgs.channel.send(caption, {
         file: fileToSend // Or replace with FileOptions object
     });
 }
 
-async function doRequest(url) {
-    return request({
+async function doRequest(url, callback) {
+    request({
         url: url,
     }, (error, resp, body) => {
         if (!error && resp.statusCode == 200) {
-            return body;
+            return callback(body);
         } else {
             //Throw error, this will be caught in the .catch() 
             return error;
