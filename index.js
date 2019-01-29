@@ -97,7 +97,7 @@ client.on("message", async message => {
                     doRequest("https://api.pixiv.moe/v1/search?word=" + message.content.split(".pixiv ")[1] + "&page=1", function(src) {
 			    if(src == null || src == undefined || src == "") {
 				    message.chanel.send("ora ketemu gambare");
-				    break;
+				    return;
 			    }
                         var data = JSON.parse(src);
                         var length = data.response.length;
