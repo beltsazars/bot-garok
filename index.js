@@ -48,9 +48,9 @@ client.on("ready", () => {
         volumeCmd: 'volume', // Sets the name for the 'volume' command.
         leaveCmd: 'leave', // Sets the name for the 'leave' command.
         searchCmd: 'search',
-        disableLoop: true, // Disable the loop command.
-        ownerOverMember: true,
-        ownerID: process.env.OWNER_ID.toString()
+        disableLoop: true // Disable the loop command.
+        //ownerOverMember: true
+        //ownerID: process.env.OWNER_ID.toString()
     });
     console.log("music loaded");
 });
