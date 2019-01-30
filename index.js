@@ -50,7 +50,7 @@ client.on("ready", () => {
         searchCmd: 'search',
         disableLoop: true, // Disable the loop command.
         ownerOverMember: true,
-        ownerID: process.env.OWNER_ID
+        ownerID: process.env.OWNER_ID.toString()
     });
     console.log("music loaded");
 });
