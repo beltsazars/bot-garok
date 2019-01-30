@@ -4,6 +4,7 @@ const request = require("request");
 const YTDL = require("ytdl-core");
 const Kaori = require('kaori');
 const kaori = new Kaori();
+const Music = require("discord.js-musicbot-addon");
 
 var servers = {};
 
@@ -35,6 +36,23 @@ client.on("ready", () => {
         since: Date.time
     });
     console.log("garok-bot started");
+
+    Music.start(client, {
+        botPrefix :".",
+        defaultPrefix: ".",
+        anyoneCanSkip: true,
+        anyoneCanLeave: true,
+        youtubeKey: process.env.YOUTUBE_KEY,
+        helpCmd: 'help', // Sets the name for the help command.
+        playCmd: 'play', // Sets the name for the 'play' command.
+        volumeCmd: 'volume', // Sets the name for the 'volume' command.
+        leaveCmd: 'leave', // Sets the name for the 'leave' command.
+        searchCmd: 'search',
+        disableLoop: true // Disable the loop command.
+        ownerOverMember: true,
+        ownerID: process.env.OWNER_ID
+    });
+    console.log("music loaded");
 });
 
 client.on("message", async message => {
