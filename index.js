@@ -96,7 +96,7 @@ client.on("message", async message => {
                     console.log("mapset:"+mapSet);
 
 
-                    dlOsu(mapSet, function(resp){
+                    dlOsu(mapSet, function(){
                         const channel = message.member.voiceChannel;
                         if (!channel || channel == undefined) return console.error("The channel does not exist!");
                         channel.join().then(connection => {
