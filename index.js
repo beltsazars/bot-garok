@@ -155,7 +155,8 @@ client.on("message", async message => {
                                         });
 
                                     }
-                                    server.queue.push({"sender:":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet});
+                                    server.queue.push({"sender":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet});
+                                    console.log("queued "+server.queue[server.queue.length-1]);
                                     globalDispatcher.on("end", end => {
                                         globalDispatcher = "";
                                         console.log("Removed :" + server.queue[0].artist + " - " + server.queue[0].title + " ["+end+"]");
@@ -163,7 +164,11 @@ client.on("message", async message => {
                                         if(server.queue.length==0)
                                             channel.leave();
                                         else {
-                                            console.log("Next :" + server.queue[0].artist + " - " + server.queue[0].title);
+                                            console.log("Next :" + server.queue[0].mapSet + " " + server.queue[0].artist + " - " + server.queue[0].title);
+                                            if(!fs.existsSync(server.queue[0].mapSet+".mp3")) {
+                                                message.channel.send("An error occured. Please try again.");
+                                                //break;
+                                            }
                                             message.channel.send({
                                                 embed: {
                                                     color: 3447003,
