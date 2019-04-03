@@ -110,7 +110,7 @@ client.on("message", async message => {
                                     fs.mkdirSync(dir);
                                 }
                                 const file = fs.createWriteStream(dir+"/"+mapSet+".zip");
-                                fs.createReadStream(mapSet+".zip").pipe(unzipper.Extract({ path: dir+"/"+mapSet }));
+                                fs.createReadStream(dir+"/"+mapSet+".zip").pipe(unzipper.Extract({ path: dir+"/"+mapSet }));
                                 //console.log(getFiles("mapSet/"));
                             const dispatcher = connection.playFile(dir+"/"+mapSet+"/audio.mp3");
                             }).catch(e => {
