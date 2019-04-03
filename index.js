@@ -103,6 +103,7 @@ client.on("message", async message => {
                     .pipe(fs.createWriteStream(mapSet+".mp3"));
 
                     console.log("test mp3 exists: "+fs.existsSync(mapSet+".mp3"));
+                    if(!fs.existsSync(mapSet+".mp3")) message.channel.send("An error occured. Please try again.");
 
                     const channel = message.member.voiceChannel;
                     if (!channel || channel == undefined) return console.error("The channel does not exist!");
@@ -110,6 +111,7 @@ client.on("message", async message => {
                         var beatmapInfo;
                         doRequest("https://osu.ppy.sh/api/get_beatmaps?k="+process.env.OSU_KEY+"&s="+mapSet, function(response){
                             beatmapInfo = JSON.stringify(response);
+                            console.log(beatmapInfo);
                         });
                                     message.channel.send({
                                         embed: {
