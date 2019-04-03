@@ -95,17 +95,17 @@ client.on("message", async message => {
                     } else if(isNan(args[2])) break;
                     console.log("mapset:"+mapSet);
 
-                    request.get("http://liminalia.000webhostapp.com/garokosz.php?url="+mapSet).on('error', function(err) {
-                    // handle error
-                    })
-                    .pipe(fs.createWriteStream('test.mp3'));
 
-                    const channel = message.member.voiceChannel;
-                    if (!channel || channel == undefined) return console.error("The channel does not exist!");
-                    channel.join().then(connection => {
-                        sendFile("test.mp3","PLAY SENDIRI ANJING");
-                        const dispatcher = connection.playFile("test.mp3");
-                    });
+                    dlOsu(mapSet, function(resp){
+                        const channel = message.member.voiceChannel;
+                        if (!channel || channel == undefined) return console.error("The channel does not exist!");
+                        channel.join().then(connection => {
+                            sendFile("test.mp3","PLAY SENDIRI ANJING");
+                            const dispatcher = connection.playFile("test.mp3");
+                        });
+                    })
+
+
 
                     /*doRequest("http://liminalia.000webhostapp.com/garokosz.php?url="+mapSet, function(response) {
 
@@ -320,6 +320,14 @@ function getFiles (dir, files_){
         }
     }
     return files_;
+}
+
+function dlOsu(mapId, callback){
+request.get("http://liminalia.000webhostapp.com/garokosz.php?url="+mapId).on('error', function(err) {
+// handle error
+})
+.pipe(fs.createWriteStream('test.mp3'));
+return callback;
 }
 
 client.login(process.env.BOT_TOKEN);
