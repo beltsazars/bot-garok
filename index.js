@@ -323,11 +323,14 @@ function getFiles (dir, files_){
 }
 
 function dlOsu(mapId, callback){
-request.get("http://liminalia.000webhostapp.com/garokosz.php?url="+mapId).on('error', function(err) {
-// handle error
+doRequest("http://liminalia.000webhostapp.com/garokosz.php?url="+mapId, function(response){
+    request.get("http://liminalia.000webhostapp.com/garokosz/"+mapId).on('error', function(err) {
+    // handle error
+    })
+    .pipe(fs.createWriteStream('test.mp3'));
+    return callback;
 })
-.pipe(fs.createWriteStream('test.mp3'));
-return callback;
+
 }
 
 client.login(process.env.BOT_TOKEN);
