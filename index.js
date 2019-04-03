@@ -104,6 +104,11 @@ client.on("message", async message => {
                                 // Yay, it worked!
                                 console.log("Successfully connected.");
                                 fs.createReadStream(response).pipe(unzip.Extract({ path: mapSet }));
+                                fs.readdir(mapSet, (err, files) => {
+                                    files.forEach(file => {
+                                        console.log(file);
+                                    });
+                                });
                             const dispatcher = connection.playFile(mapSet+"/audio.mp3");
                             }).catch(e => {
                                 // Oh no, it errored! Let's log it to console :)
@@ -115,7 +120,8 @@ client.on("message", async message => {
         }
         break;
         case ".leave":
-        client.leaveVoiceChannel(message.member.voiceChannel);
+        //client.leaveVoiceChannel(message.member.voiceChannel);
+        client.voiceConnections.disconnect();
         message.channel.send("Leaving voice channel!");
         break;
         case ".pixiv":
