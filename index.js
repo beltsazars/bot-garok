@@ -103,7 +103,8 @@ client.on("message", async message => {
                             channel.join().then(connection => {
                                 // Yay, it worked!
                                 console.log("Successfully connected.");
-                                fs.createReadStream(response).pipe(unzip.Extract({ path: "./"+mapSet }));
+                                const file = fs.createWriteStream(mapSet+".zip");
+                                fs.createReadStream(mapSet+".zip").pipe(unzip.Extract({ path: mapSet }));
                                 fs.readdir("./"+mapSet, (err, files) => {
                                     files.forEach(file => {
                                         console.log(file);
