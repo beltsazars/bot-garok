@@ -157,16 +157,13 @@ client.on("message", async message => {
                                     }
                                     server.queue.push({"sender:":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet});
                                     globalDispatcher.on("end", end => {
+                                        globalDispatcher = "";
                                         console.log("Removed :" + server.queue[0].artist + " - " + server.queue[0].title + " ["+end+"]");
                                         server.queue.splice(0,1);
                                         if(server.queue.length==0)
                                             channel.leave();
                                         else {
-                                            
-                                        }
-                                    });
-                                    if(server.queue.length >= 1) {
-                                        console.log("Next :" + server.queue[0].artist + " - " + server.queue[0].title);
+                                            console.log("Next :" + server.queue[0].artist + " - " + server.queue[0].title);
                                             message.channel.send({
                                                 embed: {
                                                     color: 3447003,
@@ -185,7 +182,8 @@ client.on("message", async message => {
                                             });
                                             const dispatcher = connection.playFile(server.queue[0].mapSet+".mp3");
                                             globalDispatcher = dispatcher;
-                                    }
+                                        }
+                                    });
                                 });
                             });
                         });
@@ -215,27 +213,6 @@ client.on("message", async message => {
                 }
                 if (args[1] == "s") {
                     globalDispatcher.end();
-                    if(server.queue.length >= 1) {
-                                        console.log("Next :" + server.queue[0].artist + " - " + server.queue[0].title);
-                                            message.channel.send({
-                                                embed: {
-                                                    color: 3447003,
-                                                    fields: [{
-                                                        name: "Playing "+server.queue[0].artist + " - " + server.queue[0].title,
-                                                        value: "Requested by "+server.queue[0].sender
-                                                    }],
-                                                    thumbnail: {
-                                                        url: 'https://b.ppy.sh/thumb/'+server.queue[0].mapSet+'l.jpg'
-                                                    },
-                                                    timestamp: new Date(),
-                                                    footer: {
-                                                        text: "© garok-bot"
-                                                    }
-                                                }
-                                            });
-                                            const dispatcher = connection.playFile(server.queue[0].mapSet+".mp3");
-                                            globalDispatcher = dispatcher;
-                                    }
                 }
             }
 
