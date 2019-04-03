@@ -5,6 +5,8 @@ const YTDL = require("ytdl-core");
 const Kaori = require('kaori');
 const kaori = new Kaori();
 const Music = require("discord.js-musicbot-addon");
+const fs = require('fs');
+
 
 var servers = {};
 
@@ -76,6 +78,37 @@ client.on("message", async message => {
         return;
 
     switch (args[0]) {
+        case ".osu":
+        if(!args[1]) break;
+        else {
+            if(args[1] == "p") {
+                if(!args[2]) break;
+                else {
+                    var mapSet = -1;
+                    console.log("arg:"+args[2]);
+                    if(args[2].includes("beatmapsets/")) {
+                        mapSet = args[2].split("beatmapsets/")[1];
+                        if(isNaN(mapSet)) break;
+                    } else if(!isNaN(args[2])) {
+                        mapSet = args[2];
+                    }
+                    console.log("mapset:"+mapSet);
+                    doRequest("https://bloodcat.com/osu/?q=_data/beatmaps/"+mapSet+".osz", function(response) {
+                        console.log("Downloading " + response);
+                        voiceChannel.join() 
+                        .then(connection => {
+                            fs.createReadStream(response).pipe(unzip.Extract({ path: mapSet }));
+                            const dispatcher = connection.playFile(mapSet+"/audio.mp3");
+                        });
+                    })
+                }
+            }
+        }
+        break;
+        case ".leave":
+        voiceChannel.disconnect();
+        message.channel.send("Leaving voice channel!");
+        break;
         case ".pixiv":
             if (args[1] == null || args[1] == "" || args[1] == undefined) {
                 //will random here.
@@ -114,13 +147,13 @@ client.on("message", async message => {
                     //console.log("https://api.pixiv.moe/v1/search?word=" + message.content.split(".pixiv ")[1] + "&page=1");
                     doRequest("https://api.pixiv.moe/v1/search?word=" + message.content.split(".pixiv ")[1] + "&page=1", function(src) {
                         var data = JSON.parse(src);
-			    if(data.count == 0) {
-				    message.channel.send("Ora ketemu gambar e");
-				    return;
-			    }
+                if(data.count == 0) {
+                    message.channel.send("Ora ketemu gambar e");
+                    return;
+                }
                         var length = data.response.length;
                         var rng = Math.floor(Math.random() * ((data.response.length - 1) - 0 + 1) + 0);
-			    console.log(rng);
+                console.log(rng);
                         console.log(data.response[rng].image_urls.large)
                         message.channel.send("", {
                             file: data.response[rng].image_urls.large // Or replace with FileOptions object
