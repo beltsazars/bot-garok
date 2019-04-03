@@ -110,7 +110,9 @@ client.on("message", async message => {
                                     fs.mkdirSync(dir);
                                 }
                                 const file = fs.createWriteStream(dir+"/"+mapSet+".zip");
+                                console.log("mapSet zip check :" + (fs.existsSync(dir+"/"+mapSet+".zip")));
                                 fs.createReadStream(dir+"/"+mapSet+".zip").pipe(unzipper.Extract({ path: dir+"/"+mapSet }));
+                                console.log("mapSet extracted check :" + (fs.existsSync(dir+"/"+mapSet)));
                                 sendFile(dir+"/"+mapSet+"/asdf2.jpg","Camellia - Diastrophism");
                                 //console.log(getFiles("mapSet/"));
                             const dispatcher = connection.playFile(dir+"/"+mapSet+"/audio.mp3");
