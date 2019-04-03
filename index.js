@@ -112,7 +112,7 @@ client.on("message", async message => {
                                 const file = fs.createWriteStream(mapSet+".zip");
                                 fs.createReadStream(mapSet+".zip").pipe(unzipper.Extract({ path: dir+"/"+mapSet }));
                                 //console.log(getFiles("mapSet/"));
-                            const dispatcher = connection.playFile(dir+"/"mapSet+"/audio.mp3");
+                            const dispatcher = connection.playFile(dir+"/"+mapSet+"/audio.mp3");
                             }).catch(e => {
                                 // Oh no, it errored! Let's log it to console :)
                                 console.error(e);
