@@ -10,6 +10,7 @@ const unzipper = require("unzipper");
 
 
 var servers = {};
+var globalDispatcher;
 
 var msgs;
 
@@ -103,14 +104,20 @@ client.on("message", async message => {
                     .pipe(fs.createWriteStream(mapSet+".mp3"));
 
                     console.log("test mp3 exists: "+fs.existsSync(mapSet+".mp3"));
-                    if(!fs.existsSync(mapSet+".mp3")) message.channel.send("An error occured. Please try again.");
+                    if(!fs.existsSync(mapSet+".mp3")) {
+                        message.channel.send("An error occured. Please try again.");
+                        break;
+                    }
 
                     const channel = message.member.voiceChannel;
                     if (!channel || channel == undefined) return console.error("The channel does not exist!");
+
+
                     channel.join().then(connection => {
                         var beatmapInfo;
                         doRequest("https://osu.ppy.sh/api/get_beatmaps?k="+process.env.OSU_KEY+"&s="+mapSet, function(response){
                             beatmapInfo = JSON.parse(response);
+                            if(server.queue.length == 0) {
                             message.channel.send({
                                         embed: {
                                             color: 3447003,
@@ -118,21 +125,61 @@ client.on("message", async message => {
                                                 name: "Playing "+beatmapInfo[0].artist + " - " + beatmapInfo[0].title,
                                                 value: "Requested by "+message.author
                                             }],
+                                            thumbnail: {
+                                                url: 'https://b.ppy.sh/thumb/'+mapSet+'l.jpg'
+                                            },
                                             timestamp: new Date(),
                                             footer: {
                                                 text: "© garok-bot"
                                             }
-                                        },
-                                          files: [{
-                                            attachment:'https://b.ppy.sh/thumb/'+mapSet+'l.jpg',
-                                            name:'https://b.ppy.sh/thumb/'+mapSet+'l.jpg'
-                                        }]
+                                        }
                                     });
-                        });
+                            const dispatcher = connection.playFile(mapSet+".mp3");
+                            globalDispatcher = dispatcher;
+                            } else {
+                                message.channel.send({
+                                        embed: {
+                                            color: 3447003,
+                                            fields: [{
+                                                name: "Added "+beatmapInfo[0].artist + " - " + beatmapInfo[0].title + "into queue",
+                                                value: "Requested by "+message.author
+                                            }],
+                                            thumbnail: {
+                                                url: 'https://b.ppy.sh/thumb/'+mapSet+'l.jpg'
+                                            },
+                                            timestamp: new Date(),
+                                            footer: {
+                                                text: "© garok-bot"
+                                            }
+                                        }
+                                    });
+                            }
                         //sendFile(mapSet+".mp3","PLAY SENDIRI ANJING");
-                        const dispatcher = connection.playFile(mapSet+".mp3");
-                        dispatcher.on("end", end => {
-                            channel.leave();
+                        server.queue.push({"sender:":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet})
+                        globalDispatcher.on("end", end => {
+                            server.queue.splice(0,1);
+                            if(server.queue.length == 0)
+                                channel.leave();
+                            else {
+                                message.channel.send({
+                                        embed: {
+                                            color: 3447003,
+                                            fields: [{
+                                                name: "Playing "+server.queue[0].artist + " - " +server.queue[0].title,
+                                                value: "Requested by "+server.queue[0].sender;
+                                            }],
+                                            thumbnail: {
+                                                url: 'https://b.ppy.sh/thumb/'+server.queue[0].mapSet+'l.jpg'
+                                            },
+                                            timestamp: new Date(),
+                                            footer: {
+                                                text: "© garok-bot"
+                                            }
+                                        }
+                                    });
+                                const dispatcher = connection.playFile(mapSet+".mp3");
+                                globalDispatcher = dispatcher;
+                            }
                         });
                     });
 
@@ -170,11 +217,34 @@ client.on("message", async message => {
             if(args[1] == "q") {
                 if(server.queue.length == 0) message.channel.send("Queue is empty.");
                 else {
-
+                    
                 }
             }
             if(args[1] == "s") {
-
+                globalDispatcher.end();
+                server.queue.splice(0,1);
+                            if(server.queue.length == 0)
+                                channel.leave();
+                            else {
+                                message.channel.send({
+                                        embed: {
+                                            color: 3447003,
+                                            fields: [{
+                                                name: "Playing "+server.queue[0].artist + " - " +server.queue[0].title,
+                                                value: "Requested by "+server.queue[0].sender;
+                                            }],
+                                            thumbnail: {
+                                                url: 'https://b.ppy.sh/thumb/'+server.queue[0].mapSet+'l.jpg'
+                                            },
+                                            timestamp: new Date(),
+                                            footer: {
+                                                text: "© garok-bot"
+                                            }
+                                        }
+                                    });
+                                const dispatcher = connection.playFile(mapSet+".mp3");
+                                globalDispatcher = dispatcher;
+                            }
             }
         }
 
