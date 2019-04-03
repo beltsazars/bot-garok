@@ -6,6 +6,7 @@ const Kaori = require('kaori');
 const kaori = new Kaori();
 const Music = require("discord.js-musicbot-addon");
 const fs = require('fs');
+const unzipper = require("unzipper");
 
 
 var servers = {};
@@ -104,7 +105,7 @@ client.on("message", async message => {
                                 // Yay, it worked!
                                 console.log("Successfully connected.");
                                 const file = fs.createWriteStream(mapSet+".zip");
-                                fs.createReadStream(mapSet+".zip").pipe(unzip.Extract({ path: mapSet }));
+                                fs.createReadStream(mapSet+".zip").pipe(unzipper.Extract({ path: mapSet }));
                                 fs.readdir("./"+mapSet, (err, files) => {
                                     files.forEach(file => {
                                         console.log(file);
