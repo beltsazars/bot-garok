@@ -94,8 +94,7 @@ client.on("message", async message => {
                         mapSet = args[2];
                     }
                     console.log("mapset:"+mapSet);
-                    console.log("https://bloodcat.com/osu/_data/beatmaps/"+mapSet+".osz");
-                    doRequest("https://bloodcat.com/osu/_data/beatmaps/"+mapSet+".osz", function(response) {
+                    doRequest("http://liminalia.000webhostapp.com/garokosz.php?url="+mapSet, function(response) {
 
                         
                         const channel = message.member.voiceChannel;
@@ -103,19 +102,9 @@ client.on("message", async message => {
                         if (!channel || channel == undefined) return console.error("The channel does not exist!");
                             channel.join().then(connection => {
                                 // Yay, it worked!
-                                console.log("Successfully connected.");
-                                console.log("Creating directory");
-                                var dir = './tmpMapset';
-                                if (!fs.existsSync(dir)){
-                                    fs.mkdirSync(dir);
-                                }
-                                const file = fs.createWriteStream(dir+"/"+mapSet+".zip");
-                                console.log("mapSet zip check :" + (fs.existsSync(dir+"/"+mapSet+".zip")));
-                                fs.createReadStream(dir+"/"+mapSet+".zip").pipe(unzipper.Extract({ path: dir+"/"+mapSet }));
-                                console.log("mapSet extracted check :" + (fs.existsSync(dir+"/"+mapSet)));
-                                sendFile(dir+"/"+mapSet+"/asdf2.jpg","Camellia - Diastrophism");
-                                //console.log(getFiles("mapSet/"));
-                            const dispatcher = connection.playFile(dir+"/"+mapSet+"/audio.mp3");
+                            //const dispatcher = connection.playFile(dir+"/"+mapSet+"/audio.mp3");
+                            const streamOptions = { seek: 0, volume: 1 };
+                            const dispatcher = connection.playStream(response, streamOptions);
                             }).catch(e => {
                                 // Oh no, it errored! Let's log it to console :)
                                 console.error(e);
