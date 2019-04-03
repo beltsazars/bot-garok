@@ -116,7 +116,7 @@ client.on("message", async message => {
                                             color: 3447003,
                                             fields: [{
                                                 name: "Playing "+beatmapInfo[0].artist + " - " + beatmapInfo[0].title,
-                                                value: "Requested by "+message.author;
+                                                value: "Requested by "+message.author
                                             }],
                                             timestamp: new Date(),
                                             footer: {
