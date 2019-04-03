@@ -213,7 +213,7 @@ client.on("message", async message => {
                             });
                     })*/
                 }
-            }
+            
             if(args[1] == "q") {
                 if(server.queue.length == 0) message.channel.send("Queue is empty.");
                 else {
