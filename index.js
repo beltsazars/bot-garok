@@ -165,10 +165,6 @@ client.on("message", async message => {
                                             channel.leave();
                                         else {
                                             console.log("Next :" + server.queue[0].mapSet + " " + server.queue[0].artist + " - " + server.queue[0].title);
-                                            console.log(fs.existsSync(server.queue[0].mapSet+".mp3"));
-                                            var stats = fs.statSync(server.queue[0].mapSet+".mp3")
-                                            var fileSizeInBytes = stats["size"]
-                                            console.log(fileSizeInBytes / 1000000.0);
                                             message.channel.send({
                                                 embed: {
                                                     color: 3447003,
@@ -187,6 +183,8 @@ client.on("message", async message => {
                                             });
                                             const dispatcher = connection.playFile(server.queue[0].mapSet+".mp3");
                                             globalDispatcher = dispatcher;
+                                            console.log(dispatcher);
+                                            return;
                                         }
                                     });
                                 });
