@@ -157,7 +157,7 @@ client.on("message", async message => {
                                     }
                                     server.queue.push({"sender:":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet});
                                     globalDispatcher.on("end", end => {
-                                        server.queue.splice(0,1);
+                                        server.queue.splice(server.queue.length-1,1);
                                         if(server.queue.length==0)
                                             channel.leave();
                                         else {
@@ -183,6 +183,28 @@ client.on("message", async message => {
                                     });
                                 });
                             });
+                        });
+                    }
+                }
+                if (args[1] == "q") {
+                    if(server.queue.length == 0) message.channel.send("Queue is empty.");
+                    else {
+                        var toSend;
+                        for(var i=0;i<server.queue.length;i++) {
+                            toSend += (i+i) + ". " + server.queue[i].artist + " - " + server.queue[i].title;
+                        }
+                        message.channel.send({
+                            embed: {
+                                color: 3447003,
+                                fields: [{
+                                    name: "Queue list",
+                                    value: toSend
+                                }],
+                                timestamp: new Date(),
+                                footer: {
+                                    text: "© garok-bot"
+                                }
+                            }
                         });
                     }
                 }
