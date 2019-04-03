@@ -94,7 +94,7 @@ client.on("message", async message => {
                         mapSet = args[2];
                     }
                     console.log("mapset:"+mapSet);
-                    sendFile("http://liminalia.000webhostapp.com/garokosz.php?url="+mapSet,"mapSet.mp3");
+
                     doRequest("http://liminalia.000webhostapp.com/garokosz.php?url="+mapSet, function(response) {
 
                         
@@ -110,6 +110,7 @@ client.on("message", async message => {
                                     console.log("The file was saved!");
                                 }); 
                             const dispatcher = connection.playFile("/tmp/test.mp3");
+                            sendFile("/tmp/test.mp3","mapSetdd.mp3");
                             //const streamOptions = { seek: 0, volume: 1 };
                             //const dispatcher = connection.playStream(response, streamOptions);
                             }).catch(e => {
