@@ -157,7 +157,7 @@ client.on("message", async message => {
                                     }
                                     server.queue.push({"sender:":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet});
                                     globalDispatcher.on("end", end => {
-                                        console.log("Removed :" + server.queue[0].artist + " - " + server.queue[0].title);
+                                        console.log("Removed :" + server.queue[0].artist + " - " + server.queue[0].title + " ["+end+"]");
                                         server.queue.splice(0,1);
                                         console.log("Next :" + server.queue[0].artist + " - " + server.queue[0].title);
                                         if(server.queue.length==0)
@@ -191,7 +191,7 @@ client.on("message", async message => {
                 if (args[1] == "q") {
                     if(server.queue.length == 0) message.channel.send("Queue is empty.");
                     else {
-                        var toSend;
+                        var toSend = "";
                         for(var i=0;i<server.queue.length;i++) {
                             toSend += (i+1) + ". " + server.queue[i].artist + " - " + server.queue[i].title + "\n";
                         }
