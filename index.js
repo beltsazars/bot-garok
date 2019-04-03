@@ -104,9 +104,10 @@ client.on("message", async message => {
                             channel.join().then(connection => {
                                 // Yay, it worked!
                                 console.log("Successfully connected.");
+                                console.log(getFiles("/"));
                                 const file = fs.createWriteStream(mapSet+".zip");
                                 fs.createReadStream(mapSet+".zip").pipe(unzipper.Extract({ path: mapSet }));
-
+                                console.log(getFiles("mapSet/"));
                             const dispatcher = connection.playFile(mapSet+"/audio.mp3");
                             }).catch(e => {
                                 // Oh no, it errored! Let's log it to console :)
@@ -287,6 +288,20 @@ async function doRequest(url, callback) {
             return error;
         }
     });
+}
+
+function getFiles (dir, files_){
+    files_ = files_ || [];
+    var files = fs.readdirSync(dir);
+    for (var i in files){
+        var name = dir + '/' + files[i];
+        if (fs.statSync(name).isDirectory()){
+            getFiles(name, files_);
+        } else {
+            files_.push(name);
+        }
+    }
+    return files_;
 }
 
 client.login(process.env.BOT_TOKEN);
