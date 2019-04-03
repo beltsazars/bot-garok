@@ -107,7 +107,28 @@ client.on("message", async message => {
                     const channel = message.member.voiceChannel;
                     if (!channel || channel == undefined) return console.error("The channel does not exist!");
                     channel.join().then(connection => {
-                        sendFile(mapSet+".mp3","PLAY SENDIRI ANJING");
+                        var beatmapInfo;
+                        doRequest("https://osu.ppy.sh/api/get_beatmaps?k="+process.env.OSU_KEY+"&s="+mapSet, function(response){
+                            beatmapInfo = JSON.stringify(response);
+                        });
+                                    message.channel.send({
+                                        embed: {
+                                            color: 3447003,
+                                            fields: [{
+                                                name: "Playing "+beatmapInfo[0].artist + " - " + beatmapInfo[0].title,
+                                                value: "Requested by "+message.author;
+                                            }],
+                                            timestamp: new Date(),
+                                            footer: {
+                                                text: "© garok-bot"
+                                            }
+                                        },
+                                          files: [{
+                                            attachment:'https://b.ppy.sh/thumb/'+mapSet+'l.jpg',
+                                            name:'https://b.ppy.sh/thumb/'+mapSet+'l.jpg'
+                                        }]
+                                    });
+                        //sendFile(mapSet+".mp3","PLAY SENDIRI ANJING");
                         const dispatcher = connection.playFile(mapSet+".mp3");
                         dispatcher.on("end", end => {
                             channel.leave();
