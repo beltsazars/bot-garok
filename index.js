@@ -96,7 +96,7 @@ client.on("message", async message => {
                     console.log("https://bloodcat.com/osu/_data/beatmaps/"+mapSet+".osz");
                     doRequest("https://bloodcat.com/osu/_data/beatmaps/"+mapSet+".osz", function(response) {
 
-                        console.log("Downloading " + response);
+                        //console.log("Downloading " + response);
                         const channel = message.member.voiceChannel;
                         console.log("Channel :"+channel);
                         if (!channel || channel == undefined) return console.error("The channel does not exist!");
@@ -109,13 +109,6 @@ client.on("message", async message => {
                                 // Oh no, it errored! Let's log it to console :)
                                 console.error(e);
                             });
-
-                        voiceChannel.join() 
-                        .then(connection => {
-                            fs.createReadStream(response).pipe(unzip.Extract({ path: mapSet }));
-                            const dispatcher = connection.playFile(mapSet+"/audio.mp3");
-                        });
-                    })
                 }
             }
         }
