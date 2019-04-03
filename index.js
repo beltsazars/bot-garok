@@ -97,7 +97,7 @@ client.on("message", async message => {
                     doRequest("https://bloodcat.com/osu/_data/beatmaps/"+mapSet+".osz", function(response) {
 
                         console.log("Downloading " + response);
-                        const channel = mmessage.member.voiceState.channelID;
+                        const channel = message.member.voiceState.channelID;
                         console.log("Channel :"+channel);
                         if (!channel) return console.error("The channel does not exist!");
                             channel.join().then(connection => {
