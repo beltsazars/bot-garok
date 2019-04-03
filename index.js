@@ -111,9 +111,7 @@ client.on("message", async message => {
                         var beatmapInfo;
                         doRequest("https://osu.ppy.sh/api/get_beatmaps?k="+process.env.OSU_KEY+"&s="+mapSet, function(response){
                             beatmapInfo = JSON.parse(response);
-                            console.log(beatmapInfo);
-                        });
-                                    message.channel.send({
+                            message.channel.send({
                                         embed: {
                                             color: 3447003,
                                             fields: [{
@@ -130,6 +128,7 @@ client.on("message", async message => {
                                             name:'https://b.ppy.sh/thumb/'+mapSet+'l.jpg'
                                         }]
                                     });
+                        });
                         //sendFile(mapSet+".mp3","PLAY SENDIRI ANJING");
                         const dispatcher = connection.playFile(mapSet+".mp3");
                         dispatcher.on("end", end => {
