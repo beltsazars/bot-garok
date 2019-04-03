@@ -106,7 +106,7 @@ client.on("message", async message => {
                                 console.log("Successfully connected.");
                                 const file = fs.createWriteStream(mapSet+".zip");
                                 fs.createReadStream(mapSet+".zip").pipe(unzipper.Extract({ path: mapSet }));
-                                fs.readdir("./"+mapSet, (err, files) => {
+                                fs.readdir(mapSet, (err, files) => {
                                     files.forEach(file => {
                                         console.log(file);
                                     });
