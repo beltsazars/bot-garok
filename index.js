@@ -159,10 +159,10 @@ client.on("message", async message => {
                                     globalDispatcher.on("end", end => {
                                         console.log("Removed :" + server.queue[0].artist + " - " + server.queue[0].title + " ["+end+"]");
                                         server.queue.splice(0,1);
-                                        console.log("Next :" + server.queue[0].artist + " - " + server.queue[0].title);
                                         if(server.queue.length==0)
                                             channel.leave();
                                         else {
+                                            console.log("Next :" + server.queue[0].artist + " - " + server.queue[0].title);
                                             message.channel.send({
                                                 embed: {
                                                     color: 3447003,
@@ -179,7 +179,7 @@ client.on("message", async message => {
                                                     }
                                                 }
                                             });
-                                            const dispatcher = connection.playFile(mapSet+".mp3");
+                                            const dispatcher = connection.playFile(server.queue[0].mapSet+".mp3");
                                             globalDispatcher = dispatcher;
                                         }
                                     });
@@ -209,6 +209,9 @@ client.on("message", async message => {
                             }
                         });
                     }
+                }
+                if (args[1] == "s") {
+                    globalDispatcher.end();
                 }
             }
 
