@@ -99,7 +99,7 @@ client.on("message", async message => {
                         console.log("Downloading " + response);
                         const channel = message.member.voiceState.channelID;
                         console.log("Channel :"+channel);
-                        if (!channel) return console.error("The channel does not exist!");
+                        if (!channel || channel == undefined) return console.error("The channel does not exist!");
                             channel.join().then(connection => {
                                 // Yay, it worked!
                                 console.log("Successfully connected.");
