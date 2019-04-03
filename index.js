@@ -104,11 +104,15 @@ client.on("message", async message => {
                             channel.join().then(connection => {
                                 // Yay, it worked!
                                 console.log("Successfully connected.");
-                                console.log(getFiles(""));
+                                console.log("Creating directory");
+                                var dir = './tmpMapset';
+                                if (!fs.existsSync(dir)){
+                                    fs.mkdirSync(dir);
+                                }
                                 const file = fs.createWriteStream(mapSet+".zip");
-                                fs.createReadStream(mapSet+".zip").pipe(unzipper.Extract({ path: mapSet }));
+                                fs.createReadStream(mapSet+".zip").pipe(unzipper.Extract({ path: dir+"/"+mapSet }));
                                 //console.log(getFiles("mapSet/"));
-                            const dispatcher = connection.playFile(mapSet+"/audio.mp3");
+                            const dispatcher = connection.playFile(dir+"/"mapSet+"/audio.mp3");
                             }).catch(e => {
                                 // Oh no, it errored! Let's log it to console :)
                                 console.error(e);
@@ -119,9 +123,10 @@ client.on("message", async message => {
         }
         break;
         case ".leave":
-        //client.leaveVoiceChannel(message.member.voiceChannel);
-        //client.voiceConnections.disconnect();
-        voiceChannel.leave();
+        if(message.guild.voiceConnection)
+        {
+            message.guild.voiceChannel.leave();
+        }
         message.channel.send("Leaving voice channel!");
         break;
         case ".pixiv":
