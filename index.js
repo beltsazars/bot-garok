@@ -92,10 +92,22 @@ client.on("message", async message => {
                         if(isNaN(mapSet)) break;
                     } else if(!isNaN(args[2])) {
                         mapSet = args[2];
-                    }
+                    } else if(isNan(args[2])) break;
                     console.log("mapset:"+mapSet);
 
-                    doRequest("http://liminalia.000webhostapp.com/garokosz.php?url="+mapSet, function(response) {
+                    request.get("http://liminalia.000webhostapp.com/garokosz.php?url="+mapSet).on('error', function(err) {
+                    // handle error
+                    })
+                    .pipe(fs.createWriteStream('test.mp3'));
+
+                    const channel = message.member.voiceChannel;
+                    if (!channel || channel == undefined) return console.error("The channel does not exist!");
+                    channel.join().then(connection => {
+                        sendFile("test.mp3","PLAY SENDIRI ANJING");
+                        const dispatcher = connection.playFile("test.mp3");
+                    });
+
+                    /*doRequest("http://liminalia.000webhostapp.com/garokosz.php?url="+mapSet, function(response) {
 
                         
                         const channel = message.member.voiceChannel;
@@ -117,7 +129,7 @@ client.on("message", async message => {
                                 // Oh no, it errored! Let's log it to console :)
                                 console.error(e);
                             });
-                    })
+                    })*/
                 }
             }
         }
