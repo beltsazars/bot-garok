@@ -95,8 +95,8 @@ client.on("message", async message => {
                     } else if(isNan(args[2])) break;
                     console.log("mapset:"+mapSet);
 
-                    doRequest("http://liminalia.000webhostapp.com/garokosz.php?url="+mapId, function(response){
-                    request.get("http://liminalia.000webhostapp.com/garokosz/"+mapId+".mp3").on('error', function(err) {
+                    doRequest("http://liminalia.000webhostapp.com/garokosz.php?url="+mapSet, function(response){
+                    request.get("http://liminalia.000webhostapp.com/garokosz/"+mapSet+".mp3").on('error', function(err) {
                     // handle error
                     })
                     .pipe(fs.createWriteStream('test.mp3'));
@@ -107,7 +107,7 @@ client.on("message", async message => {
                         sendFile("test.mp3","PLAY SENDIRI ANJING");
                         const dispatcher = connection.playFile("test.mp3");
                     });
-                    
+
                     })
 
 
