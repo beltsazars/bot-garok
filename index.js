@@ -104,7 +104,7 @@ client.on("message", async message => {
 
                             if(!fs.existsSync(mapSet+".mp3")) {
                                 message.channel.send("An error occured. Please try again.");
-                                break;
+                                //break;
                             }
 
                             const channel = message.member.voiceChannel;
