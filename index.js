@@ -93,11 +93,11 @@ client.on("message", async message => {
                         mapSet = args[2];
                     }
                     console.log("mapset:"+mapSet);
-                    console.log("requesting "+"https://bloodcat.com/osu/?q=_data/beatmaps/"+mapSet+".osz");
-                    doRequest("https://bloodcat.com/osu/?q=_data/beatmaps/"+mapSet+".osz", function(response) {
+                    console.log("https://bloodcat.com/osu/_data/beatmaps/"+mapSet+".osz");
+                    doRequest("https://bloodcat.com/osu/_data/beatmaps/"+mapSet+".osz", function(response) {
 
                         console.log("Downloading " + response);
-                        const channel = message.channel;
+                        const channel = mmessage.member.voiceState.channelID;
                         console.log("Channel :"+channel);
                         if (!channel) return console.error("The channel does not exist!");
                             channel.join().then(connection => {
@@ -121,7 +121,7 @@ client.on("message", async message => {
         }
         break;
         case ".leave":
-        voiceChannel.disconnect();
+        client.leaveVoiceChannel(message.member.voiceState.channelID);
         message.channel.send("Leaving voice channel!");
         break;
         case ".pixiv":
