@@ -166,7 +166,7 @@ client.on("message", async message => {
                                             color: 3447003,
                                             fields: [{
                                                 name: "Playing "+server.queue[0].artist + " - " +server.queue[0].title,
-                                                value: "Requested by "+server.queue[0].sender;
+                                                value: "Requested by "+server.queue[0].sender;\
                                             }],
                                             thumbnail: {
                                                 url: 'https://b.ppy.sh/thumb/'+server.queue[0].mapSet+'l.jpg'
@@ -231,7 +231,7 @@ client.on("message", async message => {
                                             color: 3447003,
                                             fields: [{
                                                 name: "Playing "+server.queue[0].artist + " - " +server.queue[0].title,
-                                                value: "Requested by "+server.queue[0].sender;
+                                                value: "Requested by "+server.queue[0].sender
                                             }],
                                             thumbnail: {
                                                 url: 'https://b.ppy.sh/thumb/'+server.queue[0].mapSet+'l.jpg'
