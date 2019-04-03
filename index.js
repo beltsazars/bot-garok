@@ -110,7 +110,7 @@ client.on("message", async message => {
                     channel.join().then(connection => {
                         var beatmapInfo;
                         doRequest("https://osu.ppy.sh/api/get_beatmaps?k="+process.env.OSU_KEY+"&s="+mapSet, function(response){
-                            beatmapInfo = JSON.stringify(response);
+                            beatmapInfo = JSON.parse(response);
                             console.log(beatmapInfo);
                         });
                                     message.channel.send({
