@@ -99,13 +99,17 @@ client.on("message", async message => {
                     request.get("http://liminalia.000webhostapp.com/garokosz/"+mapSet+".mp3").on('error', function(err) {
                     // handle error
                     })
-                    .pipe(fs.createWriteStream('test.mp3'));
+                    .pipe(fs.createWriteStream(mapSet+".mp3"));
 
+                    console.log("test mp3 exists: "+fs.existsSync(mapSet+".mp3"));
                     const channel = message.member.voiceChannel;
                     if (!channel || channel == undefined) return console.error("The channel does not exist!");
                     channel.join().then(connection => {
-                        sendFile("test.mp3","PLAY SENDIRI ANJING");
-                        const dispatcher = connection.playFile("test.mp3");
+                        sendFile(mapSet+".mp3","PLAY SENDIRI ANJING");
+                        const dispatcher = connection.playFile(mapSet+".mp3");
+                        dispatcher.on("end", end => {
+                            voiceChannel.leave();
+                        });
                     });
 
                     })
