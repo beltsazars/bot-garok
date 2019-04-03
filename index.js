@@ -102,9 +102,15 @@ client.on("message", async message => {
                         if (!channel || channel == undefined) return console.error("The channel does not exist!");
                             channel.join().then(connection => {
                                 // Yay, it worked!
-                            //const dispatcher = connection.playFile(dir+"/"+mapSet+"/audio.mp3");
-                            const streamOptions = { seek: 0, volume: 1 };
-                            const dispatcher = connection.playStream(response, streamOptions);
+                                fs.writeFile("/tmp/test.mp3", response, function(err) {
+                                    if(err) {
+                                        return console.log(err);
+                                    }
+                                    console.log("The file was saved!");
+                                }); 
+                            const dispatcher = connection.playFile("/tmp/test.mp3");
+                            //const streamOptions = { seek: 0, volume: 1 };
+                            //const dispatcher = connection.playStream(response, streamOptions);
                             }).catch(e => {
                                 // Oh no, it errored! Let's log it to console :)
                                 console.error(e);
