@@ -157,7 +157,9 @@ client.on("message", async message => {
                                     }
                                     server.queue.push({"sender:":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet});
                                     globalDispatcher.on("end", end => {
-                                        server.queue.splice(server.queue.length-1,1);
+                                        console.log("Removed :" + server.queue[0].artist + " - " + server.queue[0].title);
+                                        server.queue.splice(0,1);
+                                        console.log("Next :" + server.queue[0].artist + " - " + server.queue[0].title);
                                         if(server.queue.length==0)
                                             channel.leave();
                                         else {
@@ -165,11 +167,11 @@ client.on("message", async message => {
                                                 embed: {
                                                     color: 3447003,
                                                     fields: [{
-                                                        name: "Playing "+beatmapInfo[0].artist + " - " + beatmapInfo[0].title,
-                                                        value: "Requested by "+message.author
+                                                        name: "Playing "+server.queue[0].artist + " - " + server.queue[0].title,
+                                                        value: "Requested by "+server.queue[0].sender
                                                     }],
                                                     thumbnail: {
-                                                        url: 'https://b.ppy.sh/thumb/'+mapSet+'l.jpg'
+                                                        url: 'https://b.ppy.sh/thumb/'+server.queue[0].mapSet+'l.jpg'
                                                     },
                                                     timestamp: new Date(),
                                                     footer: {
@@ -191,7 +193,7 @@ client.on("message", async message => {
                     else {
                         var toSend;
                         for(var i=0;i<server.queue.length;i++) {
-                            toSend += (i+i) + ". " + server.queue[i].artist + " - " + server.queue[i].title;
+                            toSend += (i+1) + ". " + server.queue[i].artist + " - " + server.queue[i].title + "\n";
                         }
                         message.channel.send({
                             embed: {
