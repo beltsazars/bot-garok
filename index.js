@@ -97,7 +97,7 @@ client.on("message", async message => {
                     doRequest("https://bloodcat.com/osu/_data/beatmaps/"+mapSet+".osz", function(response) {
 
                         console.log("Downloading " + response);
-                        const channel = message.member.voiceState.channelID;
+                        const channel = message.member.voiceChannel;
                         console.log("Channel :"+channel);
                         if (!channel || channel == undefined) return console.error("The channel does not exist!");
                             channel.join().then(connection => {
@@ -121,7 +121,7 @@ client.on("message", async message => {
         }
         break;
         case ".leave":
-        client.leaveVoiceChannel(message.member.voiceState.channelID);
+        client.leaveVoiceChannel(message.member.voiceChannel);
         message.channel.send("Leaving voice channel!");
         break;
         case ".pixiv":
