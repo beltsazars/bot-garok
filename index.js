@@ -96,7 +96,7 @@ client.on("message", async message => {
                     console.log("requesting "+"https://bloodcat.com/osu/?q=_data/beatmaps/"+mapSet+".osz");
                     doRequest("https://bloodcat.com/osu/?q=_data/beatmaps/"+mapSet+".osz", function(response) {
 
-                        console.log("Downloading " + response);\
+                        console.log("Downloading " + response);
                         const channel = message.channel;
                         console.log("Channel :"+channel);
                         if (!channel) return console.error("The channel does not exist!");
