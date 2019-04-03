@@ -165,10 +165,10 @@ client.on("message", async message => {
                                             channel.leave();
                                         else {
                                             console.log("Next :" + server.queue[0].mapSet + " " + server.queue[0].artist + " - " + server.queue[0].title);
-                                            if(!fs.existsSync(server.queue[0].mapSet+".mp3")) {
-                                                message.channel.send("An error occured. Please try again.");
-                                                //break;
-                                            }
+                                            console.log(fs.existsSync(server.queue[0].mapSet+".mp3"));
+                                            var stats = fs.statSync(server.queue[0].mapSet+".mp3")
+                                            var fileSizeInBytes = stats["size"]
+                                            console.log(fileSizeInBytes / 1000000.0);
                                             message.channel.send({
                                                 embed: {
                                                     color: 3447003,
