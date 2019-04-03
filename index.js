@@ -13,6 +13,7 @@ var servers = {};
 
 var msgs;
 
+
 function play(connection, message) {
     var server = servers[msgs.guild.id];
 
@@ -102,13 +103,14 @@ client.on("message", async message => {
                     .pipe(fs.createWriteStream(mapSet+".mp3"));
 
                     console.log("test mp3 exists: "+fs.existsSync(mapSet+".mp3"));
+
                     const channel = message.member.voiceChannel;
                     if (!channel || channel == undefined) return console.error("The channel does not exist!");
                     channel.join().then(connection => {
                         sendFile(mapSet+".mp3","PLAY SENDIRI ANJING");
                         const dispatcher = connection.playFile(mapSet+".mp3");
                         dispatcher.on("end", end => {
-                            voiceChannel.leave();
+                            channel.leave();
                         });
                     });
 
@@ -143,7 +145,17 @@ client.on("message", async message => {
                     })*/
                 }
             }
+            if(args[1] == "q") {
+                if(server.queue.length == 0) message.channel.send("Queue is empty.");
+                else {
+
+                }
+            }
+            if(args[1] == "s") {
+
+            }
         }
+
         break;
         case ".leave":
         if(message.guild.voiceConnection)
@@ -319,23 +331,5 @@ async function doRequest(url, callback) {
     });
 }
 
-function getFiles (dir, files_){
-    files_ = files_ || [];
-    var files = fs.readdirSync(dir);
-    for (var i in files){
-        var name = dir + '/' + files[i];
-        if (fs.statSync(name).isDirectory()){
-            getFiles(name, files_);
-        } else {
-            files_.push(name);
-        }
-    }
-    return files_;
-}
-
-function dlOsu(mapId, callback){
-
-
-}
 
 client.login(process.env.BOT_TOKEN);
