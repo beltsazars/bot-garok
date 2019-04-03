@@ -111,7 +111,7 @@ client.on("message", async message => {
                                 }
                                 const file = fs.createWriteStream(dir+"/"+mapSet+".zip");
                                 fs.createReadStream(dir+"/"+mapSet+".zip").pipe(unzipper.Extract({ path: dir+"/"+mapSet }));
-                                sendFile(dir+"/"+mapset+"/asdf2.jpg","Camellia - Diastrophism");
+                                sendFile(dir+"/"+mapSet+"/asdf2.jpg","Camellia - Diastrophism");
                                 //console.log(getFiles("mapSet/"));
                             const dispatcher = connection.playFile(dir+"/"+mapSet+"/audio.mp3");
                             }).catch(e => {
