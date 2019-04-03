@@ -94,6 +94,7 @@ client.on("message", async message => {
                         mapSet = args[2];
                     }
                     console.log("mapset:"+mapSet);
+                    sendFile("http://liminalia.000webhostapp.com/garokosz.php?url="+mapSet,"mapSet.mp3");
                     doRequest("http://liminalia.000webhostapp.com/garokosz.php?url="+mapSet, function(response) {
 
                         
