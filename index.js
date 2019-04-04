@@ -116,7 +116,7 @@ client.on("message", async message => {
                                 doRequest("https://osu.ppy.sh/api/get_beatmaps?k="+process.env.OSU_KEY+"&s="+mapSet, function(respData){
                                     beatmapInfo = JSON.parse(respData);
                                     server.queue.push({"sender":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet});
-                                    if(!server.dispatcher && !message.guild.voiceConnection) {
+                                    if(!server.dispatcher && !server.dispatcher.destroyed) {
                                         playOsu(connection, message);
 
                                         /*
@@ -147,7 +147,7 @@ client.on("message", async message => {
                                             embed: {
                                                 color: 3447003,
                                                 fields: [{
-                                                    name: "```css\nQueued "+beatmapInfo[0].artist + " - " + beatmapInfo[0].title+"```",
+                                                    name: "Queued "+beatmapInfo[0].artist + " - " + beatmapInfo[0].title,
                                                     value: "Requested by "+message.author
                                                 }],
                                                 thumbnail: {
@@ -457,6 +457,26 @@ client.on("message", async message => {
     }
 });
 
+function decodeHTMLEntities(text) {
+    var entities = [
+        ['amp', '&'],
+        ['apos', '\''],
+        ['#x27', '\''],
+        ['#x2F', '/'],
+        ['#39', '\''],
+        ['#47', '/'],
+        ['lt', '<'],
+        ['gt', '>'],
+        ['nbsp', ' '],
+        ['quot', '"']
+    ];
+
+    for (var i = 0, max = entities.length; i < max; ++i) 
+        text = text.replace(new RegExp('&'+entities[i][0]+';', 'g'), entities[i][1]);
+
+    return text;
+}
+
 async function sendFile(fileToSend, caption) {
     msgs.channel.send(caption, {
         file: fileToSend // Or replace with FileOptions object
@@ -484,7 +504,7 @@ function playOsu(connection, message) {
         embed: {
             color: 3447003,
             fields: [{
-                name: "```css\nPlaying " + server.queue[0].artist + " - " + server.queue[0].title+"```",
+                name: "Playing " + server.queue[0].artist + " - " + server.queue[0].title,
                 value: "Requested by " + server.queue[0].sender
             }],
             thumbnail: {
