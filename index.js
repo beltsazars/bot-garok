@@ -116,8 +116,9 @@ client.on("message", async message => {
                                 doRequest("https://osu.ppy.sh/api/get_beatmaps?k="+process.env.OSU_KEY+"&s="+mapSet, function(respData){
                                     beatmapInfo = JSON.parse(respData);
                                     server.queue.push({"sender":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet});
-                                    if(!server.dispatcher || message.guild.voiceConnection) {
+                                    if(!server.dispatcher && !message.guild.voiceConnection) {
                                         playOsu(connection, message);
+
                                         /*
                                         message.channel.send({
                                             embed: {
@@ -141,6 +142,7 @@ client.on("message", async message => {
                                         */
                                     } else {
 
+                                        console.log("queued "+server.queue[server.queue.length-1]);
                                         message.channel.send({
                                             embed: {
                                                 color: 3447003,
@@ -160,7 +162,7 @@ client.on("message", async message => {
 
                                     }
                                     
-                                    console.log("queued "+server.queue[server.queue.length-1]);
+                                    
                                     /*globalDispatcher.on("end", end => {
                                         globalDispatcher = "";
                                         console.log("Removed :" + server.queue[0].artist + " - " + server.queue[0].title + " ["+end+"]");
@@ -477,6 +479,7 @@ async function doRequest(url, callback) {
 function playOsu(connection, message) {
     var server = servers[message.guild.id];
     server.dispatcher = connection.playFile(server.queue[0].mapSet + ".mp3");
+    console.log("playing "+server.queue[0].artist + " - " + server.queue[0].title);
     message.channel.send({
         embed: {
             color: 3447003,
