@@ -145,7 +145,7 @@ client.on("message", async message => {
                                             embed: {
                                                 color: 3447003,
                                                 fields: [{
-                                                    name: "Queued ```diff\n"+beatmapInfo[0].artist + "``` - ```autohotkey\n" + beatmapInfo[0].title+"```",
+                                                    name: "Queued ```yaml\n"+beatmapInfo[0].artist + "``` - ```glsl\n" + beatmapInfo[0].title+"```",
                                                     value: "Requested by "+message.author
                                                 }],
                                                 thumbnail: {
@@ -201,7 +201,7 @@ client.on("message", async message => {
                     else {
                         var toSend = "";
                         for(var i=0;i<server.queue.length;i++) {
-                            toSend += "```ini\n" + (i+1) + "```. ```diff\n" + server.queue[i].artist + "``` -  ```autohotkey\n" + server.queue[i].title + "```\n";
+                            toSend += "```ini\n" + (i+1) + "```. ```yaml\n" + server.queue[i].artist + "``` -  ```glsl\n" + server.queue[i].title + "```\n";
                         }
                         message.channel.send({
                             embed: {
@@ -479,7 +479,7 @@ function playOsu(connection, message) {
         embed: {
             color: 3447003,
             fields: [{
-                name: "Playing ```diff\n" + server.queue[0].artist + "``` - ```autohotkey\n" + server.queue[0].title+"```",
+                name: "Playing ```yaml\n" + server.queue[0].artist + "``` - ```glsl\n" + server.queue[0].title+"```",
                 value: "Requested by " + server.queue[0].sender
             }],
             thumbnail: {
