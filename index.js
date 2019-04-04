@@ -115,7 +115,7 @@ client.on("message", async message => {
                                 doRequest("https://osu.ppy.sh/api/get_beatmaps?k="+process.env.OSU_KEY+"&s="+mapSet, function(respData){
                                     beatmapInfo = JSON.parse(respData);
                                     server.queue.push({"sender":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet});
-                                    if(server.queue.length==0) {
+                                    if(server.queue.length==1) {
                                         playOsu(connection, message);
                                         /*
                                         message.channel.send({
