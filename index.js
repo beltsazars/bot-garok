@@ -384,7 +384,7 @@ client.on("message", async message => {
                                     var title = video.split('">')[video.split('">').length-1];
                                     var url = video.split('<a href="')[1].split('"')[0];
                                     videoArray.push([title, url]);
-                                    textList += "```ini\n" + i + "```. " + title + "\n";
+                                    textList += "```yaml\n" + i + "```. ```js\n" + title + "```\n";
                                 }
 
                                 message.channel.send({
