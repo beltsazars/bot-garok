@@ -145,7 +145,7 @@ client.on("message", async message => {
                                             embed: {
                                                 color: 3447003,
                                                 fields: [{
-                                                    name: "Queued "+beatmapInfo[0].artist + " - " + beatmapInfo[0].title,
+                                                    name: "Queued ```diff\n"+beatmapInfo[0].artist + "``` - ```autohotkey\n" + beatmapInfo[0].title+"```",
                                                     value: "Requested by "+message.author
                                                 }],
                                                 thumbnail: {
@@ -201,7 +201,7 @@ client.on("message", async message => {
                     else {
                         var toSend = "";
                         for(var i=0;i<server.queue.length;i++) {
-                            toSend += (i+1) + ". " + server.queue[i].artist + " - " + server.queue[i].title + "\n";
+                            toSend += "```ini\n" + (i+1) + "```. ```diff\n" + server.queue[i].artist + "``` -  ```autohotkey\n" + server.queue[i].title + "```\n";
                         }
                         message.channel.send({
                             embed: {
@@ -374,7 +374,7 @@ client.on("message", async message => {
 
                         } else {
                             doRequest("https://www.youtube.com/results?search_query="+message.content.split(".m "+args[1]+" ")[1], function(response){
-                                //only display 1 - 5
+                                //only display 1 - 5, and will be error if videos less than 5 or not found
                                 var toDisplay = 5;
                                 var videos = response.split('<h3 class="yt-lockup-title ">');
                                 var videoArray = [];
@@ -384,7 +384,7 @@ client.on("message", async message => {
                                     var title = video.split('">')[video.split('">').length-1];
                                     var url = video.split('<a href="')[1].split('"')[0];
                                     videoArray.push([title, url]);
-                                    textList += i + ". " + title + "\n";
+                                    textList += "```ini\n" + i + "```. " + title + "\n";
                                 }
 
                                 message.channel.send({
@@ -479,7 +479,7 @@ function playOsu(connection, message) {
         embed: {
             color: 3447003,
             fields: [{
-                name: "Playing " + server.queue[0].artist + " - " + server.queue[0].title,
+                name: "Playing ```diff\n" + server.queue[0].artist + "``` - ```autohotkey\n" + server.queue[0].title+"```",
                 value: "Requested by " + server.queue[0].sender
             }],
             thumbnail: {
