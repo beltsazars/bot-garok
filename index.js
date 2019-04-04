@@ -253,7 +253,7 @@ client.on("message", async message => {
                 //only works if sender is in voice channel same as garok
                 //message.guild.voiceChannel.leave(); 
                 //mode toltl
-                if(message.member.voiceChannel) message.member.voiceChannel.join().then(connection => { connection.leave()});
+                if(message.member.voiceChannel) message.member.voiceChannel.join().then(connection => { connection.disconnect();});
                 server.queue = [];
             }
             message.channel.send("Leaving voice channel!");
