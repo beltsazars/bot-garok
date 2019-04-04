@@ -114,8 +114,10 @@ client.on("message", async message => {
                                 var beatmapInfo;
                                 doRequest("https://osu.ppy.sh/api/get_beatmaps?k="+process.env.OSU_KEY+"&s="+mapSet, function(respData){
                                     beatmapInfo = JSON.parse(respData);
+                                    server.queue.push({"sender":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet});
                                     if(server.queue.length==0) {
-
+                                        playOsu(connection, message);
+                                        /*
                                         message.channel.send({
                                             embed: {
                                                 color: 3447003,
@@ -135,6 +137,7 @@ client.on("message", async message => {
 
                                         const dispatcher = connection.playFile(mapSet+".mp3");
                                         globalDispatcher = dispatcher;
+                                        */
                                     } else {
 
                                         message.channel.send({
@@ -155,9 +158,9 @@ client.on("message", async message => {
                                         });
 
                                     }
-                                    server.queue.push({"sender":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet});
+                                    
                                     console.log("queued "+server.queue[server.queue.length-1]);
-                                    globalDispatcher.on("end", end => {
+                                    /*globalDispatcher.on("end", end => {
                                         globalDispatcher = "";
                                         console.log("Removed :" + server.queue[0].artist + " - " + server.queue[0].title + " ["+end+"]");
                                         server.queue.splice(0,1);
@@ -182,11 +185,11 @@ client.on("message", async message => {
                                                 }
                                             });
                                             const dispatcher = connection.playFile(server.queue[0].mapSet+".mp3");
-                                            globalDispatcher = dispatcher;
-                                            console.log(dispatcher);
+                                            //globalDispatcher = dispatcher;
+                                            //console.log(dispatcher);
                                             return;
                                         }
-                                    });
+                                    });*/
                                 });
                             });
                         });
@@ -393,5 +396,32 @@ async function doRequest(url, callback) {
     });
 }
 
+function playOsu(connection, message) {
+    var server = servers[message.guild.id];
+    server.dispatcher = connection.playFile(server.queue[0].mapSet + ".mp3");
+    message.channel.send({
+        embed: {
+            color: 3447003,
+            fields: [{
+                name: "Playing " + server.queue[0].artist + " - " + server.queue[0].title,
+                value: "Requested by " + server.queue[0].sender
+            }],
+            thumbnail: {
+                url: 'https://b.ppy.sh/thumb/' + server.queue[0].mapSet + 'l.jpg'
+            },
+            timestamp: new Date(),
+            footer: {
+                text: "© garok-bot"
+            }
+        }
+    });
+    server.queue.shift();
+    server.dispatcher.on("end", function() {
+
+        if (server.queue[0]) playOsu(connection, message);
+        else connection.disconnect();
+
+    });
+}
 
 client.login(process.env.BOT_TOKEN);
