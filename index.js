@@ -116,7 +116,7 @@ client.on("message", async message => {
                                 doRequest("https://osu.ppy.sh/api/get_beatmaps?k="+process.env.OSU_KEY+"&s="+mapSet, function(respData){
                                     beatmapInfo = JSON.parse(respData);
                                     server.queue.push({"sender":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet});
-                                    if(!server.dispatcher || server.dispatcher == "") {
+                                    if(!server.dispatcher || message.guild.voiceConnection) {
                                         playOsu(connection, message);
                                         /*
                                         message.channel.send({
@@ -380,13 +380,13 @@ client.on("message", async message => {
                                 var toDisplay = 5;
                                 var videos = response.split('<h3 class="yt-lockup-title ">');
                                 var videoArray = [];
-                                var textList = "";
+                                var textList = "```css\n";
                                 for(var i=1;i<=toDisplay;i++) {
                                     var video = videos[i].split('</span></a><span class="accessible-description" ')[0];
                                     var title = video.split('">')[video.split('">').length-1];
                                     var url = video.split('<a href="')[1].split('"')[0];
                                     videoArray.push([title, url]);
-                                    textList += "```yaml\n" + i + "```. ```js\n" + title + "```\n";
+                                    textList += i + ". " + title + "\n";
                                 }
 
                                 message.channel.send({
@@ -394,7 +394,7 @@ client.on("message", async message => {
                                         color: 3447003,
                                         fields: [{
                                             name: "Searching "+message.content.split(".m "+args[1]+" ")[1],
-                                            value: textList
+                                            value: textList+"```"
                                         }],
                                         timestamp: new Date(),
                                         footer: {
@@ -495,7 +495,6 @@ function playOsu(connection, message) {
     });
     server.queue.shift();
     server.dispatcher.on("end", function() {
-        server.dispatcher = "";
         if (server.queue[0]) playOsu(connection, message);
         else connection.disconnect();
 
