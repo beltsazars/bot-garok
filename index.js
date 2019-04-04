@@ -115,7 +115,7 @@ client.on("message", async message => {
                                 doRequest("https://osu.ppy.sh/api/get_beatmaps?k="+process.env.OSU_KEY+"&s="+mapSet, function(respData){
                                     beatmapInfo = JSON.parse(respData);
                                     server.queue.push({"sender":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet});
-                                    if(server.queue.length==1) {
+                                    if(!server.dispatcher) {
                                         playOsu(connection, message);
                                         /*
                                         message.channel.send({
@@ -218,7 +218,17 @@ client.on("message", async message => {
                     }
                 }
                 if (args[1] == "s") {
-                    globalDispatcher.end();
+                    if(server.dispatcher) server.dispatcher.end();
+                }
+                if (args[1] == "v") {
+                    if(!isNaN(args[2])) {
+                        if(args[2] > -1 || args[2] < 101){
+                            if(server.dispatcher) {
+                                server.dispatcher.setVolume(args[2]/100);
+                                message.channel.send("Current music volume set to : " +args[2]);
+                            }
+                        } 
+                    }
                 }
             }
 
