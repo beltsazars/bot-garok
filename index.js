@@ -116,7 +116,7 @@ client.on("message", async message => {
                                 doRequest("https://osu.ppy.sh/api/get_beatmaps?k="+process.env.OSU_KEY+"&s="+mapSet, function(respData){
                                     beatmapInfo = JSON.parse(respData);
                                     server.queue.push({"sender":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet});
-                                    if(!server.dispatcher) {
+                                    if(!server.dispatcher || server.dispatcher == "") {
                                         playOsu(connection, message);
                                         /*
                                         message.channel.send({
@@ -145,7 +145,7 @@ client.on("message", async message => {
                                             embed: {
                                                 color: 3447003,
                                                 fields: [{
-                                                    name: "Queued ```yaml\n"+beatmapInfo[0].artist + "``` - ```glsl\n" + beatmapInfo[0].title+"```",
+                                                    name: "```css\nQueued "+beatmapInfo[0].artist + " - " + beatmapInfo[0].title+"```",
                                                     value: "Requested by "+message.author
                                                 }],
                                                 thumbnail: {
@@ -201,7 +201,7 @@ client.on("message", async message => {
                     else {
                         var toSend = "";
                         for(var i=0;i<server.queue.length;i++) {
-                            toSend += "```ini\n" + (i+1) + "```. ```yaml\n" + server.queue[i].artist + "``` -  ```glsl\n" + server.queue[i].title + "```\n";
+                            toSend += "```css\n" + (i+1) + ". " + server.queue[i].artist + "-  " + server.queue[i].title + "```\n";
                         }
                         message.channel.send({
                             embed: {
@@ -249,7 +249,9 @@ client.on("message", async message => {
         case ".leave":
             if (message.guild.voiceConnection) {
                 //only works if sender is in voice channel same as garok
-                message.guild.voiceChannel.leave(); 
+                //message.guild.voiceChannel.leave(); 
+                //mode toltl
+                if(message.member.voiceChannel) message.member.voiceChannel.join().then(connection => { connection.leave()});
                 server.queue = [];
             }
             message.channel.send("Leaving voice channel!");
@@ -479,7 +481,7 @@ function playOsu(connection, message) {
         embed: {
             color: 3447003,
             fields: [{
-                name: "Playing ```yaml\n" + server.queue[0].artist + "``` - ```glsl\n" + server.queue[0].title+"```",
+                name: "```css\nPlaying " + server.queue[0].artist + " - " + server.queue[0].title+"```",
                 value: "Requested by " + server.queue[0].sender
             }],
             thumbnail: {
@@ -493,7 +495,7 @@ function playOsu(connection, message) {
     });
     server.queue.shift();
     server.dispatcher.on("end", function() {
-
+        server.dispatcher = "";
         if (server.queue[0]) playOsu(connection, message);
         else connection.disconnect();
 
