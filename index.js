@@ -10,11 +10,11 @@ const unzipper = require("unzipper");
 
 
 var servers = {};
-var globalDispatcher;
+var musicTimeout = 10000;
 
 var msgs;
 
-
+/*
 function play(connection, message) {
     var server = servers[msgs.guild.id];
 
@@ -31,7 +31,7 @@ function play(connection, message) {
         }
     });
 }
-
+*/
 client.on("ready", () => {
     client.user.setPresence({
         game: {
@@ -65,7 +65,8 @@ client.on("message", async message => {
 
     if (!servers[message.guild.id]) {
         servers[message.guild.id] = {
-            queue: []
+            queue: [],
+            queueYt: []
         };
     }
 
@@ -218,7 +219,9 @@ client.on("message", async message => {
                     }
                 }
                 if (args[1] == "s") {
-                    if(server.dispatcher) server.dispatcher.end();
+                    if(server.dispatcher) {
+                        server.dispatcher.end();
+                    }
                 }
                 if (args[1] == "v") {
                     if(!isNaN(args[2])) {
@@ -230,12 +233,24 @@ client.on("message", async message => {
                         } 
                     }
                 }
+                if (args[1] == "np") {
+
+                }
+                if (args[1] == "recent") {
+                    if(args[2]) {
+                        
+                    } else {
+                        message.channel.send("Please provide osu! username.");
+                    }
+                }
             }
 
             break;
         case ".leave":
             if (message.guild.voiceConnection) {
-                message.guild.voiceChannel.leave();
+                //only works if sender is in voice channel same as garok
+                message.guild.voiceChannel.leave(); 
+                server.queue = [];
             }
             message.channel.send("Leaving voice channel!");
             break;
@@ -300,6 +315,8 @@ client.on("message", async message => {
             break;
 
         case ".m":
+        //tom ver
+        /*
             if (args[1] == 'play' || args[1] == 'p') {
                 if (!message.member.voiceChannel) {
                     message.channel.send("You must be in a voice channel!");
@@ -349,6 +366,55 @@ client.on("message", async message => {
                     }).catch(err => console.error(err));
                 }
             }
+            */
+            /* sudex ver, non ytdl-core */
+                if(args[1] && args[2]) {
+                    if(args[1] == "play" || args[1] == "p") {
+                        if(args[2].toLowerCase().includes("youtube.com/watch?v=")) {
+
+                        } else {
+                            doRequest("https://www.youtube.com/results?search_query="+message.content.split(".m "+args[1]+" ")[1], function(response){
+                                //only display 1 - 5
+                                var toDisplay = 5;
+                                var videos = response.split('<h3 class="yt-lockup-title ">');
+                                var videoArray = [];
+                                var textList = "";
+                                for(var i=1;i<=toDisplay;i++) {
+                                    var video = videos[i].split('</span></a><span class="accessible-description" ')[0];
+                                    var title = video.split('">')[video.split('">').length-1];
+                                    var url = video.split('<a href="')[1].split('"')[0];
+                                    videoArray.push([title, url]);
+                                    textList += i + ". " + title + "\n";
+                                }
+
+                                message.channel.send({
+                                    embed: {
+                                        color: 3447003,
+                                        fields: [{
+                                            name: "Searching "+message.content.split(".m "+args[1]+" ")[1],
+                                            value: textList
+                                        }],
+                                        timestamp: new Date(),
+                                        footer: {
+                                            text: "© garok-bot"
+                                        }
+                                    }
+                                });
+
+                            });
+                        }
+                    }
+                    if(args[1] == "skip" || args[1] == "s") {
+                    
+                    }
+                    if(args[1] == "queue" || args[1] == "q") {
+                    
+                    }
+                    if(args[1] == "volume" || args[1] == "v") {
+                    
+                    }
+                }
+                
             break;
 
         case ".booru":
