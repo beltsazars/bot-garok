@@ -116,7 +116,7 @@ client.on("message", async message => {
                                 doRequest("https://osu.ppy.sh/api/get_beatmaps?k="+process.env.OSU_KEY+"&s="+mapSet, function(respData){
                                     beatmapInfo = JSON.parse(respData);
                                     server.queue.push({"sender":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet});
-                                    if(!server.dispatcher) {
+                                    if(!server.dispatcher && server.queue.length == 0) {
                                         playOsu(connection, message);
 
                                         /*
@@ -201,16 +201,16 @@ client.on("message", async message => {
                 if (args[1] == "q") {
                     if(server.queue.length == 0) message.channel.send("Queue is empty.");
                     else {
-                        var toSend = "";
+                        var toSend = "```css\n";
                         for(var i=0;i<server.queue.length;i++) {
-                            toSend += "```css\n" + (i+1) + ". " + server.queue[i].artist + "-  " + server.queue[i].title + "```\n";
+                            toSend += (i+1) + ". " + server.queue[i].artist + "-  " + server.queue[i].title + "\n";
                         }
                         message.channel.send({
                             embed: {
                                 color: 3447003,
                                 fields: [{
                                     name: "Queue list",
-                                    value: toSend
+                                    value: toSend+"```"
                                 }],
                                 timestamp: new Date(),
                                 footer: {
@@ -396,7 +396,7 @@ client.on("message", async message => {
                                         color: 3447003,
                                         fields: [{
                                             name: "Searching "+message.content.split(".m "+args[1]+" ")[1],
-                                            value: textList+"```"
+                                            value: decodeHTMLEntities(textList+"```")
                                         }],
                                         timestamp: new Date(),
                                         footer: {
