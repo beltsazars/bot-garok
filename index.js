@@ -92,7 +92,7 @@ client.on("message", async message => {
                 }
                 console.log(server.toListYt[0].toString());
                 console.log("selecteed :"+server.toListYt[0][parseInt(message.content)-1][1]);
-                server.queue.push({"sender":message.author,"title":server.toListYt[0][parseInt(message.content)-1][0],artist:"","mapSet":-1,"url":server.toListYt[0][parseInt(message.content)-1][1]});
+                server.queue.push({"sender":message.author,"title":server.toListYt[0][parseInt(message.content)-1][0],artist:"","mapSet":-1,"url":"https://youtube.com"+server.toListYt[0][parseInt(message.content)-1][1]});
                 server.toListYt = [];
                 channel.join().then(connection => {
                     playOsu(connection,message);
@@ -451,7 +451,7 @@ client.on("message", async message => {
                                 //selectSong(Date.now(),message);
                                 setTimeout(selectSongB, musicTimeout, message);
                                 console.log("starting song selection by"+message.author);
-                                console.log("data :"+server.toListYt.toString());
+                                console.log("data :"+JSON.stringify(server.toListYt));
                             });
                         }
                     }
