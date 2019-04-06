@@ -580,7 +580,7 @@ function selectSong(time,message) {
     var timeOut = Date.now() + musicTimeout;
     while(time<=timeOut) {
         time = Date.now();
-    } else {
+    } 
         server.toListYt = [];
         message.channel.send("Question timed out.")
     }
