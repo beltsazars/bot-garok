@@ -80,7 +80,8 @@ client.on("message", async message => {
         message.channel.send("What's this? OwO");
     else if (server.toListYt[0]){
         console.log("yt ok");
-        if(message.author == server.toListYt[1].sender) {
+        console.log("sender :"+message.author + " with " + server.toListYt[1]);
+        if(message.author == server.toListYt[1]) {
             console.log("sender ok")
             if(!isNaN(message.content) && message.content <= server.toListYt[0].length) {
                 console.log("pos ok")
@@ -591,7 +592,7 @@ function selectSong(time,message) {
 
 function selectSongB(message) {
     var server = servers[message.guild.id];
-    if(!server.toListYt[0]) {
+    if(server.toListYt[0]) {
         server.toListYt = [];
         message.channel.send("Question timed out.")
     }
