@@ -96,7 +96,27 @@ client.on("message", async message => {
                 server.queue.push({"sender":message.author,"title":server.toListYt[0][selectedInt][0],artist:"","mapSet":-1,"url":"https://youtube.com"+server.toListYt[0][selectedInt][1]});
                 server.toListYt = [];
                 channel.join().then(connection => {
-                    playOsu(connection,message);
+                    if(!server.dispatcher && server.queue.length == 1) {
+                        playOsu(connection,message);
+                    } else {
+                        console.log("queued "+server.queue[server.queue.length-1]);
+                                        message.channel.send({
+                                            embed: {
+                                                color: 3447003,
+                                                fields: [{
+                                                    name: "Queued "+server.queue[server.queue.length-1].title,
+                                                    value: "Requested by "+message.author
+                                                }],
+                                                thumbnail: {
+                                                    url: "http://i3.ytimg.com/vi/"+server.queue[0].url.split("watch?v=")[1]+"/hqdefault.jpg"
+                                                },
+                                                timestamp: new Date(),
+                                                footer: {
+                                                    text: "© garok-bot"
+                                                }
+                                            }
+                                        });
+                    }
                 });
             }
         }
@@ -259,6 +279,12 @@ client.on("message", async message => {
                     }
                 }
                 if (args[1] == "np") {
+                        if(server.queue[0].mapSet != -1) {
+        thumbnailUrl = 'https://b.ppy.sh/thumb/' + server.queue[0].mapSet + 'l.jpg';
+    }
+    else {
+       thumbnailUrl = "http://i3.ytimg.com/vi/"+server.queue[0].url.split("watch?v=")[1]+"/hqdefault.jpg"
+    }
                     message.channel.send({
                             embed: {
                                 color: 3447003,
