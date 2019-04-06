@@ -66,7 +66,7 @@ client.on("message", async message => {
     if (!servers[message.guild.id]) {
         servers[message.guild.id] = {
             queue: [],
-            queueYt: []
+            toListYt: []
         };
     }
 
@@ -78,6 +78,22 @@ client.on("message", async message => {
         return;
     else if (message.content.toLowerCase().includes("owo"))
         message.channel.send("What's this? OwO");
+    else if (server.toListYt[0]){
+        if(message.author == server.toListYt[1].sender) {
+            if(!isNaN(message.content) && message.content <= server.toListYt[0].length) {
+                const channel = message.member.voiceChannel;
+                if (!channel || channel == undefined) {
+                    message.channel.send("Not in a voice channel.");
+                    return console.error("The channel does not exist!");
+                }
+                server.queue.push({"sender":message.author,"title":server.toListYt[0][message.content-1][0],artist:"","mapSet":-1,"url":server.toListYt[0][message.content-1][1]});
+                server.toListYt = [];
+                channel.join().then(connection => {
+                    playOsu(connection,message);
+                });
+            }
+        }
+    }
     else if (!message.content.startsWith('.'))
         return;
 
@@ -236,7 +252,22 @@ client.on("message", async message => {
                     }
                 }
                 if (args[1] == "np") {
-
+                    message.channel.send({
+                            embed: {
+                                color: 3447003,
+                            fields: [{
+                                name: "Playing " + server.queue[0].artist + " - " + server.queue[0].title,
+                                value: "Requested by " + server.queue[0].sender
+                            }],
+                            thumbnail: {
+                                url: thumbnailUrl;
+                            },
+                            timestamp: new Date(),
+                            footer: {
+                                text: "© garok-bot"
+                            }
+                        }
+                    });
                 }
                 if (args[1] == "recent") {
                     if(args[2]) {
@@ -377,10 +408,15 @@ client.on("message", async message => {
                         if(args[2].toLowerCase().includes("youtube.com/watch?v=")) {
 
                         } else {
+                            if(server.toListYt[0]) {
+                                message.channel.send("masi ad orang lain pilih lagu.");
+                                return;
+                            }
                             doRequest("https://www.youtube.com/results?search_query="+message.content.split(".m "+args[1]+" ")[1], function(response){
                                 //only display 1 - 5, and will be error if videos less than 5 or not found
-                                var toDisplay = 5;
                                 var videos = response.split('<h3 class="yt-lockup-title ">');
+                                if(videos.length <= 10)
+                                    toDisplay = videos.length;
                                 var videoArray = [];
                                 var textList = "```css\n";
                                 for(var i=1;i<=toDisplay;i++) {
@@ -390,6 +426,7 @@ client.on("message", async message => {
                                     videoArray.push([title, url]);
                                     textList += i + ". " + title + "\n";
                                 }
+                                server.toListYt.push([videoArray],message.author)
 
                                 message.channel.send({
                                     embed: {
@@ -404,7 +441,10 @@ client.on("message", async message => {
                                         }
                                     }
                                 });
-
+                                //selectSong(Date.now(),message);
+                                setTimeout(selectSongB, musicTimeout, message);
+                                console.log("starting song selection by"+message.author);
+                                console.log("data :"+JSON.stringify(server.toListYt));
                             });
                         }
                     }
@@ -498,7 +538,18 @@ async function doRequest(url, callback) {
 
 function playOsu(connection, message) {
     var server = servers[message.guild.id];
-    server.dispatcher = connection.playFile(server.queue[0].mapSet + ".mp3");
+    var thumbnailUrl = "";
+    if(server.queue[0].mapSet != -1) {
+        server.dispatcher = connection.playFile(server.queue[0].mapSet + ".mp3");
+        thumbnailUrl = 'https://b.ppy.sh/thumb/' + server.queue[0].mapSet + 'l.jpg';
+    }
+    else {
+       server.dispatcher = connection.playStream(YTDL(server.queue[0].url, {
+            filter: "audioonly"
+        })); 
+       thumbnailUrl = "http://i3.ytimg.com/vi/"+server.queue[0].url.split("watch?v=")[1]+"/hqdefault.jpg"
+    }
+        
     console.log("playing "+server.queue[0].artist + " - " + server.queue[0].title);
     message.channel.send({
         embed: {
@@ -508,7 +559,7 @@ function playOsu(connection, message) {
                 value: "Requested by " + server.queue[0].sender
             }],
             thumbnail: {
-                url: 'https://b.ppy.sh/thumb/' + server.queue[0].mapSet + 'l.jpg'
+                url: thumbnailUrl;
             },
             timestamp: new Date(),
             footer: {
@@ -522,6 +573,24 @@ function playOsu(connection, message) {
         else connection.disconnect();
 
     });
+}
+
+function selectSong(time,message) {
+    var server = servers[message.guild.id];
+    var timeOut = Date.now() + musicTimeout;
+    while(time<=timeOut) {
+        time = Date.now();
+    } else {
+        server.toListYt = [];
+        message.channel.send("Question timed out.")
+    }
+}
+
+function selectSongB(message) {
+    if(server.toListYt[0]) {
+        server.toListYt = [];
+        message.channel.send("Question timed out.")
+    }
 }
 
 client.login(process.env.BOT_TOKEN);
