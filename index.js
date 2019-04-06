@@ -415,6 +415,7 @@ client.on("message", async message => {
                             doRequest("https://www.youtube.com/results?search_query="+message.content.split(".m "+args[1]+" ")[1], function(response){
                                 //only display 1 - 5, and will be error if videos less than 5 or not found
                                 var videos = response.split('<h3 class="yt-lockup-title ">');
+                                var toDisplay = 10;
                                 if(videos.length <= 10)
                                     toDisplay = videos.length;
                                 var videoArray = [];
