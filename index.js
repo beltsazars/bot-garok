@@ -434,7 +434,7 @@ client.on("message", async message => {
                                     videoArray.push([title, url]);
                                     textList += i + ". " + title + "\n";
                                 }
-                                server.toListYt.push([videoArray],message.author)
+                                server.toListYt.push(videoArray,message.author)
 
                                 message.channel.send({
                                     embed: {
