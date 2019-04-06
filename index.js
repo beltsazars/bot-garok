@@ -79,8 +79,11 @@ client.on("message", async message => {
     else if (message.content.toLowerCase().includes("owo"))
         message.channel.send("What's this? OwO");
     else if (server.toListYt[0]){
+        console.log("yt ok");
         if(message.author == server.toListYt[1].sender) {
+            console.log("sender ok")
             if(!isNaN(message.content) && message.content <= server.toListYt[0].length) {
+                console.log("pos ok")
                 const channel = message.member.voiceChannel;
                 if (!channel || channel == undefined) {
                     message.channel.send("Not in a voice channel.");
