@@ -445,7 +445,7 @@ client.on("message", async message => {
                                 //selectSong(Date.now(),message);
                                 setTimeout(selectSongB, musicTimeout, message);
                                 console.log("starting song selection by"+message.author);
-                                console.log("data :"+JSON.stringify(server.toListYt));
+                                console.log("data :"+server.toListYt.toString());
                             });
                         }
                     }
