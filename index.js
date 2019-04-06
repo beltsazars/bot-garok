@@ -559,7 +559,7 @@ function playOsu(connection, message) {
                 value: "Requested by " + server.queue[0].sender
             }],
             thumbnail: {
-                url: thumbnailUrl;
+                url: thumbnailUrl
             },
             timestamp: new Date(),
             footer: {
