@@ -91,8 +91,8 @@ client.on("message", async message => {
                     return console.error("The channel does not exist!");
                 }
                 console.log(server.toListYt[0].toString());
-                console.log("selecteed :"+server.toListYt[0][message.content-1][1]);
-                server.queue.push({"sender":message.author,"title":server.toListYt[0][message.content-1][0],artist:"","mapSet":-1,"url":server.toListYt[0][message.content-1][1]});
+                console.log("selecteed :"+server.toListYt[0][parseInt(message.content)-1][1]);
+                server.queue.push({"sender":message.author,"title":server.toListYt[0][parseInt(message.content)-1)][0],artist:"","mapSet":-1,"url":server.toListYt[0][parseInt(message.content)-1][1]});
                 server.toListYt = [];
                 channel.join().then(connection => {
                     playOsu(connection,message);
