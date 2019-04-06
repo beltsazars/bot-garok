@@ -587,7 +587,8 @@ function selectSong(time,message) {
 }
 
 function selectSongB(message) {
-    if(server.toListYt[0]) {
+    var server = servers[message.guild.id];
+    if(!server.toListYt[0]) {
         server.toListYt = [];
         message.channel.send("Question timed out.")
     }
