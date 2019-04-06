@@ -581,9 +581,8 @@ function selectSong(time,message) {
     while(time<=timeOut) {
         time = Date.now();
     } 
-        server.toListYt = [];
-        message.channel.send("Question timed out.")
-    }
+    server.toListYt = [];
+    message.channel.send("Question timed out.")
 }
 
 function selectSongB(message) {
