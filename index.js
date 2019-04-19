@@ -96,7 +96,7 @@ client.on("message", async message => {
                 server.queue.push({"sender":message.author,"title":server.toListYt[0][selectedInt][0],artist:"","mapSet":-1,"url":"https://youtube.com"+server.toListYt[0][selectedInt][1]});
                 server.toListYt = [];
                 channel.join().then(connection => {
-                    if(!server.dispatcher && server.queue.length == 1) {
+                    if(server.queue.length == 1) {
                         playOsu(connection,message);
                     } else {
                         console.log("queued "+server.queue[server.queue.length-1]);
@@ -104,7 +104,7 @@ client.on("message", async message => {
                                             embed: {
                                                 color: 3447003,
                                                 fields: [{
-                                                    name: "Queued "+server.queue[server.queue.length-1].title,
+                                                    name: "Enqueued "+server.queue[server.queue.length-1].title,
                                                     value: "Requested by "+message.author
                                                 }],
                                                 thumbnail: {
@@ -159,7 +159,7 @@ client.on("message", async message => {
                                 doRequest("https://osu.ppy.sh/api/get_beatmaps?k="+process.env.OSU_KEY+"&s="+mapSet, function(respData){
                                     beatmapInfo = JSON.parse(respData);
                                     server.queue.push({"sender":message.author,"artist":beatmapInfo[0].artist,"title":beatmapInfo[0].title,"mapSet":mapSet});
-                                    if(!server.dispatcher && server.queue.length == 1) {
+                                    if(server.queue.length == 1) {
                                         playOsu(connection, message);
 
                                         /*
@@ -455,7 +455,7 @@ client.on("message", async message => {
                                 var textList = "```css\n";
                                 for(var i=1;i<=toDisplay;i++) {
                                     var video = videos[i].split('</span></a><span class="accessible-description" ')[0];
-                                    var title = video.split('">')[video.split('">').length-1];
+                                    var title = decodeHTMLEntities(video.split('">')[video.split('">').length-1]);
                                     var url = video.split('<a href="')[1].split('"')[0];
                                     videoArray.push([title, url]);
                                     textList += i + ". " + title + "\n";
